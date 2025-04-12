@@ -26,7 +26,7 @@ function Login() {
       );
   
       const data = await response.json();
-      console.log(data)
+      console.log(response)
       if (data.token) {
         localStorage.setItem("Login token", data.token);
         toast.success("Login successfully!");
@@ -34,6 +34,7 @@ function Login() {
           navigate("/dashboard");
         }, 2000);
       }else{
+        navigate("/");
         toast.error("Something went wrong! Please Login again.")
       }
     } catch (error) {
