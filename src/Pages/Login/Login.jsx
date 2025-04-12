@@ -26,12 +26,15 @@ function Login() {
       );
   
       const data = await response.json();
+      console.log(data)
       if (data.token) {
         localStorage.setItem("Login token", data.token);
         toast.success("Login successfully!");
         setTimeout(() => {
           navigate("/dashboard");
         }, 2000);
+      }else{
+        toast.error("Something went wrong! Please Login again.")
       }
     } catch (error) {
       toast.error(error)
