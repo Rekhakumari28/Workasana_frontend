@@ -19,28 +19,29 @@ function Login() {
   const handleLogin = async (e) => {
     e.preventDefault();
     const user = { email, password };
-    try {
-      const response = await axios.post(
-        "https://workasana-backend-git-main-rekha-kumari-bheels-projects.vercel.app/api/users/login",
-        user
-      );
-  
-      const data = await response.json();
-      console.log(response)
-      if (data.token) {
-        localStorage.setItem("Login token", data.token);
-        toast.success("Login successfully!");
-        setTimeout(() => {
-          navigate("/dashboard");
-        }, 2000);
-      }else{
-        navigate("/");
-        toast.error("Something went wrong! Please Login again.")
-      }
-    } catch (error) {
-      toast.error(error)
+    const response = await fetch("https://workasana-backend-git-main-rekha-kumari-bheels-projects.vercel.app/api/users/login", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(user),
+    });
+
+    const data = await response.json();
+    console.log(response);
+    if (data.token) {
+      localStorage.setItem("Login token", data.token);
+      toast.success("Login successfully!");
+      setTimeout(() => {
+        navigate("/dashboard");
+      }, 2000);
+    } else {
+      navigate("/");
+      toast.error("Something went wrong! Please Login again.");
     }
-   
+
+     
+    
   };
 
   return (
