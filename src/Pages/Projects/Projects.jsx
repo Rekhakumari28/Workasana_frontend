@@ -65,10 +65,10 @@ function Projects() {
       <section className="pb-3 px-2 ">
         <div className="py-1 ">
           <span>
-            Sort By: <button className="btn sortBy pb-2" onClick={()=>taskFilters("Priority-LowToHigh", "Low-High")}>Proprity Low-High</button>
-            <button className="btn sortBy pb-2" onClick={()=>taskFilters("Priority-HighToLow", "High-Low")}>Proprity High-Low</button>
-            <button className="btn sortBy pb-2" onClick={()=>taskFilters("dateSort", "Newest-First")}>Newest First</button>
-            <button className="btn sortBy pb-2" onClick={()=>taskFilters("dateSort", "Oldest-First")}>Oldest First</button>
+            Sort By: <button className="btn sortBy pb-2" onClick={()=>taskFilters("prioritySort", "Low-High")}>Proprity Low-High</button>
+            <button className="btn sortBy pb-2" onClick={()=>taskFilters("prioritySort", "High-Low")}>Proprity High-Low</button>
+            <button className="btn sortBy pb-2" onClick={()=>taskFilters("dateSort", "Newest-Oldest")}>Newest First</button>
+            <button className="btn sortBy pb-2" onClick={()=>taskFilters("dateSort", "Oldest-Newest")}>Oldest First</button>
           </span>{" "}
          
           <span className="ms-5 ">

@@ -61,8 +61,8 @@ function TasksList({searchQuery}) {
                 <h5>{task.name}</h5>
                 <div className=" m-1">Due date: {task.timeToComplete}</div>
                 <div className=" m-1">
-                 <span className="row ms-1"> Owners: {task.owners.map((owner) => (
-                    <span className="col-md-1 px-2" key={owner._id}>
+                 <span className="row ms-1"> Owners: {task.owners.map((owner,index) => (
+                    <span className="col-md-1 px-2" key={index}>
                       <span
                         style={{
                           display: "inline-block",

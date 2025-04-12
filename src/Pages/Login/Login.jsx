@@ -28,7 +28,7 @@ function Login() {
     });
 
     const data = await response.json();
-    console.log(response);
+   
     if (data.token) {
       localStorage.setItem("Login token", data.token);
       toast.success("Login successfully!");
@@ -38,11 +38,15 @@ function Login() {
     } else {
       navigate("/");
       toast.error("Something went wrong! Please Login again.");
-    }
-
-     
+    }    
     
   };
+
+  const guestLoginHandler = async ()=>{
+console.log("clicked")
+    setEmail("rekha12345@gmail.com")
+    setPassword("rekha12345")   
+  }
 
   return (
     <div className="login-overlay">
@@ -61,6 +65,7 @@ function Login() {
                 className=" form-input"
                 type="text"
                 placeholder="Enter your email"
+                value={email}
                 onChange={(e) => setEmail(e.target.value)}
               />
               <br />
@@ -70,6 +75,7 @@ function Login() {
                 className=" form-input"
                 type="password"
                 placeholder="Password"
+                value={password}
                 onChange={(e) => setPassword(e.target.value)}
               />
               <button className="btn btn-primary width-9" type="submit">
@@ -79,6 +85,7 @@ function Login() {
                 Don't have an account?<Link to="/signup">SignUp</Link>
               </p>
             </form>
+            <button className="btn btn-success" onClick={guestLoginHandler}>Guest Login</button>
             <Toaster />
           </div>
         </div>
