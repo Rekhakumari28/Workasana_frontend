@@ -43,7 +43,7 @@ const handleDeleteTask = (id) =>{
 
 const handleLogOut = () => {
   localStorage.removeItem("Login token");
- 
+ window.location.reload()
 };
 
   return (

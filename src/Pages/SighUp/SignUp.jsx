@@ -26,7 +26,7 @@ const handleSignUp =async (e)=>{
         navigate("/");
       }, 2000);
     }else{
-      toast.success("Email is already registerd.")
+      toast.error("Email is already registerd.")
     }
 
   } catch (error) {

@@ -1,3 +1,4 @@
+import axios from "axios";
 import React, { useEffect, useState } from "react";
 import toast, { Toaster } from "react-hot-toast";
 import { Link, useNavigate } from "react-router-dom";
@@ -5,10 +6,9 @@ import { Link, useNavigate } from "react-router-dom";
 function Login() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-    const navigate = useNavigate();
-   
-  useEffect(() => {
+  const navigate = useNavigate();
 
+  useEffect(() => {
     const token = localStorage.getItem("Login token");
     console.log("token:-", token);
     if (token) {
@@ -19,22 +19,24 @@ function Login() {
   const handleLogin = async (e) => {
     e.preventDefault();
     const user = { email, password };
-       const response = await fetch("https://workasana-backend-git-main-rekha-kumari-bheels-projects.vercel.app/api/users/login", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(user),
-    });
-    
-    const data = await response.json();
-    if (data.token) {
-      localStorage.setItem("Login token", data.token);
-      toast.success("Login successfully!");
-      setTimeout(() => {
-        navigate("/dashboard");
-      }, 2000);
+    try {
+      const response = await axios.post(
+        "https://workasana-backend-git-main-rekha-kumari-bheels-projects.vercel.app/api/users/login",
+        user
+      );
+  
+      const data = await response.json();
+      if (data.token) {
+        localStorage.setItem("Login token", data.token);
+        toast.success("Login successfully!");
+        setTimeout(() => {
+          navigate("/dashboard");
+        }, 2000);
+      }
+    } catch (error) {
+      toast.error(error)
     }
+   
   };
 
   return (
