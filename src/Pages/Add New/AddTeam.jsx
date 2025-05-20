@@ -40,7 +40,7 @@ function AddTeam() {
         name: teamName,
         members: members,
       };
-      
+
       dispatch(updateTeamAsync({ id: teamId.teamId, updateTeam }));
       toast.success("Team Updated Successfully!");
       setTimeout(() => {
@@ -51,7 +51,7 @@ function AddTeam() {
         name: teamName,
         members: members,
       };
-      console.log(addTeam)
+      console.log(addTeam);
       dispatch(addTeamsAsync({ addTeam }));
       toast.success("Team added Successfully!");
       setTimeout(() => {
@@ -61,67 +61,83 @@ function AddTeam() {
   };
 
   return (
-    <div className="login-overlay">
-      <div className="popup">
-        <div className="content card-background">
-          <div className=" p-4 ">
-            <h4>{existing ? "Update Team":"Create New Team"}</h4>
-            <hr />
-
-            <form onSubmit={handleAddTeam}>
-              <label htmlFor="projectName">Team Name</label>
-              <br />
+    <div className="modal-dialog">
+      <div className="modal-content">
+        <div className="modal-header">
+          <h1 className="modal-title fs-5" id="taskModelLabel">
+            {existing ? "Update Team" : "Create New Team"}{" "}
+          </h1>
+          <button
+            type="button"
+            className="btn-close"
+            data-bs-dismiss="modal"
+            aria-label="Close"
+          ></button>
+        </div>
+        <form onSubmit={handleAddTeam}>
+          <div className="row mt-2">
+            <div className="col-md-3 ">
+              <label htmlFor="projectName" className="ms-2 col-form-label">
+                Team Name
+              </label>
+            </div>
+            <div className="col-md-8">
+              {" "}
               <input
-                className=" form-input"
+                className=" form-control "
                 type="text"
                 placeholder="Enter Team Name"
                 value={teamName}
                 onChange={(e) => setTeamName(e.target.value)}
               />
-              <br />
-              <label htmlFor="password">Add Members</label>
-              <br />
-              <div className="row " style={{ margin: "0 1px" }}>
-                <div className="col-md-8 mb-2 px-1">
-                  {" "}
-                  <input
-                    className="form-input"
-                    type="text"
-                    placeholder="Member Name"
-                    value={newMember}
-                    onChange={(e) => setNewMember(e.target.value)}
-                  />
-                </div>
-                <div className="col-md-4 my-2 px-1">
-                  <button
-                    type="button"
-                    className="btn btn-outline-primary btn-sm"
-                    onClick={handleAddMember}
-                  >
-                    Add Member
-                  </button>
-                </div>
-              </div>
+            </div>
+          </div>
+
+          <div className="row">
+            <div className="col-md-3">
+              <label htmlFor="password" className="ms-2 col-form-label">
+                Members
+              </label>
+            </div>
+            <div className="col-md-5">
+              <input
+                className="form-control mt-2"
+                type="text"
+                placeholder="Member Name"
+                value={newMember}
+                onChange={(e) => setNewMember(e.target.value)}
+              />
+            </div>
+            <div className="col-md-3 ">
+              <button
+                type="button"
+                className="btn btn-outline-primary btn-sm mt-2 py-2"
+                onClick={handleAddMember}
+              >
+                Add Member
+              </button>
+            </div>
+
+            <div className="col-md-12">
               <ul className="list-group my-2">
                 {" "}
                 {members?.length > 0 &&
                   members.map((member, index) => (
-                    <li className="list-group-item" key={index}>
+                    <li className="list-group-item mx-3" key={index}>
                       {member}
                     </li>
                   ))}
               </ul>
-
-              <Link className="btn btn-secondary mx-1 float-end" to="/teams">
-                Cancel
-              </Link>
-              <button className="btn btn-primary mx-1 float-end" type="submit">
-                {existing ? "Update": "Create"}
-              </button>
-            </form>
+            </div>
           </div>
-        </div>{" "}
-      </div>{" "}
+
+          <div className="modal-footer">
+            <button className="btn btn-primary mx-1 float-end" type="submit">
+              {existing ? "Update" : "Create"}
+            </button>
+          </div>
+        </form>
+      </div>
     </div>
   );
 }

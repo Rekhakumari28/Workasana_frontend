@@ -3,6 +3,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { fetchTasksAsync } from "../Features/taskSlice";
 import toast, { Toaster } from "react-hot-toast";
 import { Link, useSearchParams } from "react-router-dom";
+import AddTask from "../Pages/Add New/AddTask";
 
 function TasksList({searchQuery}) {
   const [searchParams, setSearchParams] = useSearchParams();
@@ -28,11 +29,10 @@ function TasksList({searchQuery}) {
 
 
   return (
-    <>
-      <div className="py-1 ">
-        <span className="fw-bold fs-2">Tasks </span>{" "}
-        <select
-          className="select mb-3"
+   <div className="row">
+    <div className="col-md-1"><h3>Tasks</h3></div>
+    <div className="col-md-5">  <select 
+          className="form-select mb-3" style={{width:"150px"}}
           onChange={(e) => handleFilterByStatus(e.target.value)}
         >
           <option value="">Filter</option>
@@ -40,29 +40,51 @@ function TasksList({searchQuery}) {
           <option value="Completed">Completed</option>
           <option value="To Do">To Do</option>
           <option value="Blocked">Blocked</option>
-        </select>
-        <Link
-          className="btn btn-primary float-end btn-sm mt-2 me-2"
-          to="/addTask"
-        >
-          + New Task
-        </Link>
+        </select></div>
+    <div className="col-md-3">
+      <div
+        className="modal fade"
+        id="addNewTask"
+        tabIndex="-1"
+        aria-labelledby="taskModelLabel"
+        aria-hidden="true"
+      >
+        <AddTask />
       </div>
+    </div>
+    <div className="col-md-3"> <button
+        type="button"
+        className="btn btn-primary float-end ms-auto me-2"
+        data-bs-toggle="modal"
+        data-bs-target="#addNewTask"
+        data-bs-whatever="@mdo"
+      >
+        + New Task
+      </button> </div>
+  
+  
 
       <div className="row">
-        {status === "Loading" && <p>Loading...</p>}
+        {error !== null && (
+        <p className="text-center p-3 mb-2 bg-warning-subtle text-info-emphasis fw-normal">
+          {error}
+        </p>
+      )}
+        {status === "Loading" &&  <p className="text-center p-3 mb-2 bg-primary-subtle text-info-emphasis fw-normal ">
+          Loading...
+        </p>}
+      
         {findTaskByQuery?.length > 0 &&
           findTaskByQuery?.map((task, index) => (
             <div className="col-md-4 py-2" key={index}>
               <div
-                className="card card-background mt-3 "
+                className="card pt-5 p-3 bg-light border-0"
                 style={{ width: "330px", height: "200px" }}
               >
-                <h5>{task.name}</h5>
-                <div className=" m-1">Due date: {task.timeToComplete}</div>
-                <div className=" m-1">
-                 <span className="row ms-1"> Owners: {task.owners.map((owner,index) => (
-                    <span className="col-md-1 px-2" key={index}>
+                <h5 className="mb-3">{task.name}</h5>
+                <p>Due date: {task.timeToComplete}</p>
+                <p>Owners: {task.owners.map((owner,index) => (
+                    <span className="col-md-1 " key={index}>
                       <span
                         style={{
                           display: "inline-block",
@@ -76,31 +98,30 @@ function TasksList({searchQuery}) {
                           color: "brown",
                           zIndex: 1,                         
                           paddingBottom: "8px",
+                           marginRight: "-10px",
                         }}
                       >
                         {owner.name.charAt(0)}
                       </span>{" "}
                      
                     </span>
-                  ))}</span> 
+                  ))}</p>
+               <p> Team: {task.team.name}</p>
                  
-                </div>
-                <div className="m-1">
-                  Team: {task.team.name}
-                </div>
 
                 <div className="card-img-overlay p-1">
                   <span
-                    className={
+                    className={ `d-inline-block px-2 rounded ${
                       task.status === "Blocked"
-                        ? "text-bg-danger p-1 rounded"
+                        ? "text-bg-danger"
                         : task.status === "Completed"
-                        ? "text-bg-primary p-1 rounded"
+                        ? "text-bg-primary"
                         : task.status === "To Do"
-                        ? "text-bg-warning p-1 rounded"
-                        : "text-bg-info p-1 rounded"
-                    }
-                  >
+                        ? "text-bg-warning"
+                        : "text-bg-info"
+                    }`  } 
+                      style={{ width: "fit-content", minWidth: "auto" }}
+                    >
                     {task.status}
                   </span>
                 </div>
@@ -110,7 +131,7 @@ function TasksList({searchQuery}) {
           ))}
         <Toaster />
       </div>
-    </>
+    </div>
   );
 }
 

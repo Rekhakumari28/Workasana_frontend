@@ -1,11 +1,17 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import axios from "axios";
 
+export const workasana_URL="https://workasana-backend-git-main-rekha-kumari-bheels-projects.vercel.app/api"
+
 export const fetchUserAsync = createAsyncThunk(
   "users/fetchUserAsync",
   async () => {
     const response = await axios.get(
-      `https://workasana-backend-git-main-rekha-kumari-bheels-projects.vercel.app/api/users`
+      `${workasana_URL}/users`, {
+        headers: {
+          Authorization: `${token}`,
+        },
+      }
     );
     const data = response.data;
     return data;
@@ -16,7 +22,7 @@ export const registerUserAsync = createAsyncThunk(
   "users/registerUserAsync",
   async ({ newUser }) => {
     const response = await axios.post(
-      `https://workasana-backend-git-main-rekha-kumari-bheels-projects.vercel.app/api/users/register`,
+      `${workasana_URL}/users/register`,
       newUser
     );
     const data = response.data;
@@ -25,15 +31,21 @@ export const registerUserAsync = createAsyncThunk(
   }
 );
 
-// export const userLoginAsync = createAsyncThunk("users/userLoginAsync",async(user)=>{
-//   const response = await axios.post(
-//     `https://workasana-backend-git-main-rekha-kumari-bheels-projects.vercel.app/api/users/login`,
-//     user
-//   );
-//   const data = response.data;
-//   console.log(data, "data submit");
-//   return data;
-// })
+export const userLoginAsync = createAsyncThunk("users/userLoginAsync",async(credentials)=>{
+  try {
+    const response = await axios.post(
+      `${workasana_URL}/users/login`,
+      credentials
+    );
+    console.log("Login response:", response.data);
+    localStorage.setItem("token", response.data.token);
+    return response.data;
+  } catch (error) {
+    console.error("Login error:", error.response?.data);
+    ;
+  }
+ 
+})
 
 export const userSlice = createSlice({
   name: "users",
@@ -72,19 +84,19 @@ export const userSlice = createSlice({
       state.error = action.error.message;
     });
 
-    //  //login
-    //  builder.addCase(userLoginAsync.pending, (state) => {
-    //   state.statusUser = "Loading";
-    // });
-    // builder.addCase(userLoginAsync.fulfilled, (state, action) => {
-    //   state.statusUser = "User Login token.";
-    //   state.users = action.payload;
-    //   console.log(action.payload, "payload");
-    // });
-    // builder.addCase(userLoginAsync.rejected, (state, action) => {
-    //   state.statusUser = "error";
-    //   state.error = action.error.message;
-    // });
+     //login
+     builder.addCase(userLoginAsync.pending, (state) => {
+      state.statusUser = "Loading";
+    });
+    builder.addCase(userLoginAsync.fulfilled, (state, action) => {
+      state.statusUser = "User Login token.";
+      state.users = action.payload;
+      console.log(action.payload, "payload");
+    });
+    builder.addCase(userLoginAsync.rejected, (state, action) => {
+      state.statusUser = "error";
+      state.error = action.error.message;
+    });
   },
 });
 

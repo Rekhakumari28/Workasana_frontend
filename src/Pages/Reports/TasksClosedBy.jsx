@@ -52,14 +52,14 @@ export function TaskClosedBy() {
   const options = {};
   return (
      
-      <div className="container " style={{ width: "400px" }}>
+      <div className="container " style={{ maxWidth: "400px" }}>
         <h4 className="content-heading text-center">Tasks Closed by Teams:</h4>
         {status === "Loading" ? (
-          <p>Pie char is loading...</p>
+          <p className="text-center p-3 mb-2 bg-primary-subtle text-info-emphasis fw-normal ">Pie char is loading...</p>
         ) : (
           <Pie data={paiChartData} options={options} />
         )}
       </div>
-    
+   
   );
 }

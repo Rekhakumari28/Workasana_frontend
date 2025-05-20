@@ -1,7 +1,10 @@
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Link, useNavigate, useParams } from "react-router-dom";
-import { fetchProjectsAsync, updateProjectAsync } from "../../Features/projectSlice";
+import {
+  fetchProjectsAsync,
+  updateProjectAsync,
+} from "../../Features/projectSlice";
 import { fetchTeamsAsync } from "../../Features/teamSlice";
 import { addTasksAsync, updateTaskAsync } from "../../Features/taskSlice";
 import { fetchUserAsync } from "../../Features/userSlice";
@@ -16,14 +19,14 @@ function AddTask() {
   const [tags, setTags] = useState([]);
   const [newTag, setNewTag] = useState("");
   const [priority, setPriority] = useState("");
-const [taskStatus, setTaskStatus] = useState("")
+  const [taskStatus, setTaskStatus] = useState("");
 
   const taskId = useParams();
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const { projects } = useSelector((state) => state.projects);
   const { teams } = useSelector((state) => state.teams);
-  const { users, statusUser } = useSelector((state) => state.users);
+ 
   const { tasks } = useSelector((state) => state.tasks);
 
   const existingTask =
@@ -48,7 +51,7 @@ const [taskStatus, setTaskStatus] = useState("")
       setOwners(existingTask.owners || []);
       setTags(existingTask.tags || []);
       setPriority(existingTask.priority || "");
-      setTaskStatus(existingTask.status || "")
+      setTaskStatus(existingTask.status || "");
     }
   }, [existingTask, existing]);
 
@@ -59,70 +62,71 @@ const [taskStatus, setTaskStatus] = useState("")
     }
   };
 
-  const handleOwners = (event) => {
-    const { checked, value } = event.target;
-  
-    if (checked) {
-      setOwners((prevVal) => [...prevVal, value]);
-    } else {
-      setOwners((prevVal) => prevVal.filter((user) => user != value));
-    }
-  };
-
   const handleAddTask = (e) => {
     e.preventDefault();
 
-  if(existing){
-    const updateTask = {
-      name: taskName,
-      project: projectName,
-      team: teamName,
-      timeToComplete: timeout,
-      tags: tags,
-      owners: owners,
-      priority:priority,
-      status: taskStatus,
-    };
+    if (existing) {
+      const updateTask = {
+        name: taskName,
+        project: projectName,
+        team: teamName,
+        timeToComplete: timeout,
+        tags: tags,
+        owners: owners,
+        priority: priority,
+        status: taskStatus,
+      };
 
-    dispatch(updateTaskAsync({id:taskId.taskId  , updateTask }));
-    toast.success("Task Updated successfully!");
-    setTimeout(()=>{
-      navigate("/settings")
-       },2000)
+      dispatch(updateTaskAsync({ id: taskId.taskId, updateTask }));
+      toast.success("Task Updated successfully!");
+      setTimeout(() => {
+        navigate("/settings");
+      }, 2000);
+    } else {
+      const newTask = {
+        name: taskName,
+        project: projectName,
+        team: teamName,
+        timeToComplete: timeout,
+        tags: tags,
+        owners: owners,
+        priority: priority,
+        status: taskStatus,
+      };
 
-  }else{
-    const newTask = {
-      name: taskName,
-      project: projectName,
-      team: teamName,
-      timeToComplete: timeout,
-      tags: tags,
-      owners: owners,
-      priority:priority,
-      status: taskStatus,
-    };
-
-    dispatch(addTasksAsync({ newTask }));
-    toast.success("New task created successfully!");
-    setTimeout(()=>{
-      navigate("/dashboard")
-       },2000)
-  }
-
+      dispatch(addTasksAsync({ newTask }));
+      toast.success("New task created successfully!");
+      setTimeout(() => {
+        navigate("/dashboard");
+      }, 2000);
+    }
   };
 
   return (
-    <div className="login-overlay">
-      <div className="popup" style={{ width: "55%", margin: "10px auto" }}>
-        <div className="content card-background">
-          <div className="p-2 ">
-            <h4>{existing ? existingTask.name : "Create New Task"}</h4>
-            <hr />
-            <form onSubmit={handleAddTask}>
-              <div className="input-group margin-1">
-                <label htmlFor="project" className="input-group-text">
+    <div className="modal-dialog">
+      <div className="modal-content">
+        <div className="modal-header">
+          <h1 className="modal-title fs-5" id="taskModelLabel">
+            Create New Project
+          </h1>
+          <button
+            type="button"
+            className="btn-close"
+            data-bs-dismiss="modal"
+            aria-label="Close"
+          ></button>
+        </div>
+        <div className="modal-body">
+          <form onSubmit={handleAddTask}>
+            <div className="row mb-3">
+              <div className="col-md-3">
+                {" "}
+                <label htmlFor="project" className="col-form-label">
                   Select Project
                 </label>
+              </div>
+              <div className="col-md-9">
+                {" "}
                 <select
                   className="form-select"
                   value={projectName}
@@ -137,11 +141,17 @@ const [taskStatus, setTaskStatus] = useState("")
                     ))}
                 </select>
               </div>
+            </div>
 
-              <div className="input-group margin-1">
-                <label htmlFor="taskName" className="input-group-text">
+            <div className="row mb-3">
+              <div className="col-md-3">
+                {" "}
+                <label htmlFor="taskName" className="col-form-label">
                   Task Name
                 </label>
+              </div>
+              <div className="col-md-9">
+                {" "}
                 <input
                   className=" form-control"
                   type="text"
@@ -150,15 +160,20 @@ const [taskStatus, setTaskStatus] = useState("")
                   onChange={(e) => setTaskName(e.target.value)}
                 />
               </div>
+            </div>
 
-              <div className="input-group margin-1">
-                <label htmlFor="team" className="input-group-text">
+            <div className="row mb-3">
+              <div className="col-md-3">
+                {" "}
+                <label htmlFor="team" className="col-form-label">
                   Select Team
                 </label>
+              </div>
+              <div className="col-md-9">
                 <select
                   className="form-select"
                   value={teamName}
-                  onChange={(e) =>setTeam(e.target.value)}
+                  onChange={(e) => setTeam(e.target.value)}
                 >
                   <option value="Dropdown">Dropdown</option>
                   {teams?.length > 0 &&
@@ -169,10 +184,16 @@ const [taskStatus, setTaskStatus] = useState("")
                     ))}
                 </select>
               </div>
-              <div className="input-group margin-1">
-                <label htmlFor="status" className="input-group-text">
-                   Status
+            </div>
+            <div className="row mb-3">
+              <div className="col-md-3">
+                {" "}
+                <label htmlFor="status" className="col-form-label">
+                  Status
                 </label>
+              </div>
+              <div className="col-md-9">
+                {" "}
                 <select
                   className="form-select"
                   value={taskStatus}
@@ -183,40 +204,36 @@ const [taskStatus, setTaskStatus] = useState("")
                   <option value="Completed">Completed</option>
                   <option value="Blocked">Blocked</option>
                   <option value="In Progress">In Progress</option>
-                  
                 </select>
               </div>
+            </div>
 
-              <div className="input-group margin-1">
-                <label htmlFor="owners" className="input-group-text">
+            <div className="row mb-3">
+              <div className="col-md-3">
+                {" "}
+                <label htmlFor="owners" className="col-form-label">
                   Owners:
                 </label>
-
-                {statusUser === "Loading" && <p>Loading...</p>}
-                {users &&
-                  users.map(
-                    (user) =>
-                      user.name &&
-                      user.password && (
-                        <label className="input-group-text" key={user._id}>
-                          {" "}
-                          <input
-                            onChange={handleOwners}
-                            type="checkbox"
-                            name="owners"
-                            value={user._id}
-                            className="form-check-input mx-1"
-                          />{" "}
-                          {user.name}
-                        </label>
-                      )
-                  )}
               </div>
+              <div className="col-md-9">
+                <input
+                  onChange={(e) => setOwners(e.target.value)}
+                  type="text"
+                  name="owners"
+                  value={owners}
+                  className="form-control mx-1"
+                />
+              </div>
+            </div>
 
-              <div className="input-group margin-1">
-                <label htmlFor="dueDate" className="input-group-text">
+            <div className="row mb-3">
+              <div className="col-md-3">
+                {" "}
+                <label htmlFor="dueDate" className="col-form-label">
                   Tags:
                 </label>
+              </div>
+              <div className="col-md-6">
                 <input
                   className="form-control"
                   type="text"
@@ -224,31 +241,37 @@ const [taskStatus, setTaskStatus] = useState("")
                   value={newTag}
                   onChange={(e) => setNewTag(e.target.value)}
                 />
-                <div className="input-group-text">
-                  <button
-                    type="button"
-                    className="btn btn-outline-primary btn-sm"
-                    onClick={handleAddTag}
-                  >
-                    Add Tag
-                  </button>
-                </div>
               </div>
 
-              <div className="input-group ">
+              <div className="col-md-3">
+                <button
+                  type="button"
+                  className="btn btn-outline-primary btn-sm"
+                  onClick={handleAddTag}
+                >
+                  Add Tag
+                </button>
+              </div>
+            </div>
+            <div className="mb-2 row ">
+              {" "}
+              {tags?.length > 0 &&
+                tags.map((tag, index) => (
+                  <div className="col-md-3" key={index}>
+                    {tag}
+                  </div>
+                ))}
+            </div>
+
+            <div className="row mb-3">
+              <div className="col-md-3">
                 {" "}
-                {tags?.length > 0 &&
-                  tags.map((tag, index) => (
-                    <div className="input-group-text" key={index}>
-                      {tag}
-                    </div>
-                  ))}
-              </div>
-
-              <div className="input-group margin-1">
-                <label htmlFor="estimateTime" className="input-group-text">
+                <label htmlFor="estimateTime" className="col-form-label">
                   Estimate Time
                 </label>
+              </div>
+              <div className="col-md-9">
+                {" "}
                 <input
                   className=" form-control"
                   type="text"
@@ -257,10 +280,15 @@ const [taskStatus, setTaskStatus] = useState("")
                   onChange={(e) => setTimeout(e.target.value)}
                 />
               </div>
-              <div className="input-group margin-1">
-                <label htmlFor="priority" className="input-group-text">
+            </div>
+            <div className="row mb-2">
+              <div className="col-md-3">
+                <label htmlFor="priority" className="col-form-label">
                   Priority
                 </label>
+              </div>
+              <div className="col-md-9">
+                {" "}
                 <select
                   className="form-select"
                   value={priority}
@@ -272,18 +300,15 @@ const [taskStatus, setTaskStatus] = useState("")
                   <option value="High">High</option>
                 </select>
               </div>
-
-              <Link
-                className="btn btn-secondary mx-1 float-end"
-                to={existing ? "/settings" : "/dashboard"}
-              >
-                Cancel
-              </Link>
-              <button className="btn btn-primary mx-1 float-end">{existing ? "Update":"Create"}</button>
-            </form>
-            <Toaster />
-          </div>
-        </div>{" "}
+            </div>
+            <div className="modal-footer">
+              <button className="btn btn-primary mx-1 float-end">
+                {existing ? "Update" : "Create"}
+              </button>
+            </div>
+          </form>
+          <Toaster />
+        </div>
       </div>{" "}
     </div>
   );

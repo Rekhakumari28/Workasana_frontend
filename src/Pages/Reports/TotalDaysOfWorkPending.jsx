@@ -8,7 +8,7 @@ ChartJs.register(CategoryScale, LinearScale, BarElement, Title, Tooltip, Legend)
 
 export const PendingWorkBarChart = () => {
 const dispatch = useDispatch()
-const {tasks} = useSelector((state)=>state.tasks)
+const {tasks, status} = useSelector((state)=>state.tasks)
 
 useEffect(()=>{
 dispatch(fetchTasksAsync())
@@ -37,8 +37,10 @@ const barData = pendingTasks?.length>0 && pendingTasks?.reduce((acc, curr) => {
       }
 const options = {}
     return (
-        <div className="container  " style={{ textAlign: "center", width: "600px" }}>
+        <div className="container  " style={{ textAlign: "center", maxWidth: "600px" }}>
            <h4 className="content-heading text-center" >Total Days of Work Pending:</h4>
+           {status === "Loading" &&
+          <p className="text-center p-3 mb-2 bg-primary-subtle text-info-emphasis fw-normal ">Bar char is loading...</p> }
           <Bar
             data={barChartData}
             options={options}

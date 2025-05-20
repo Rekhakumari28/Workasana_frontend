@@ -9,8 +9,15 @@ export const fetchTasksAsync = createAsyncThunk(
     if (taskStatus) queryParams.append("status", taskStatus);
     if (prioritySort) queryParams.append("prioritySort", prioritySort);
     if (dateSort) queryParams.append("dateSort", dateSort);
+
+    const token = localStorage.getItem("token");
     const response = await axios.get(
-      `https://workasana-backend-git-main-rekha-kumari-bheels-projects.vercel.app/api/tasks?${queryParams.toString()}`
+      `https://workasana-backend-git-main-rekha-kumari-bheels-projects.vercel.app/api/tasks?${queryParams.toString()}`,
+      {
+        headers: {
+          Authorization: `${token}`,
+        },
+      }
     );
     const data = response.data;
     return data;
@@ -20,26 +27,49 @@ export const fetchTasksAsync = createAsyncThunk(
 export const addTasksAsync = createAsyncThunk(
   "tasks/addTasksAsync",
   async ({ newTask }) => {
+    const token = localStorage.getItem("token");
     const response = await axios.post(
       `https://workasana-backend-git-main-rekha-kumari-bheels-projects.vercel.app/api/tasks`,
-      newTask
+      newTask,
+      {
+        headers: {
+          Authorization: `${token}`,
+        },
+      }
     );
     const data = response.data;
     return data;
   }
 );
 
-export const updateTaskAsync = createAsyncThunk("tasks/updateTaskAsync", async({id, updateTask})=>{
-  const response = await axios.put(`https://workasana-backend-git-main-rekha-kumari-bheels-projects.vercel.app/api/tasks/${id}`, updateTask)
-  const data = response.data
-  return data
-})
+export const updateTaskAsync = createAsyncThunk(
+  "tasks/updateTaskAsync",
+  async ({ id, updateTask }) => {
+    const token = localStorage.getItem("token");
+    const response = await axios.put(
+      `https://workasana-backend-git-main-rekha-kumari-bheels-projects.vercel.app/api/tasks/${id}`,
+      updateTask,{ headers: {
+        Authorization: `${token}`, 
+      },}
+    );
+    const data = response.data;
+    return data;
+  }
+);
 
-export const deleteTaskAsync = createAsyncThunk("tasks/deleteTaskAsync", async({id})=>{
-  const response = await axios.delete(`https://workasana-backend-git-main-rekha-kumari-bheels-projects.vercel.app/api/tasks/${id}`)
-  const data = response.data
-  return data
-})
+export const deleteTaskAsync = createAsyncThunk(
+  "tasks/deleteTaskAsync",
+  async ({ id }) => {
+    const token = localStorage.getItem("token");
+    const response = await axios.delete(
+      `https://workasana-backend-git-main-rekha-kumari-bheels-projects.vercel.app/api/tasks/${id}`,{ headers: {
+        Authorization: `${token}`, 
+      },}
+    );
+    const data = response.data;
+    return data;
+  }
+);
 
 export const taskSlice = createSlice({
   name: "tasks",
@@ -71,35 +101,32 @@ export const taskSlice = createSlice({
     builder.addCase(addTasksAsync.fulfilled, (state, action) => {
       state.status = "Added tasks";
       state.tasks = action.payload;
-      
     });
     builder.addCase(addTasksAsync.rejected, (state, action) => {
       state.status = "error";
       state.error = action.error.message;
     });
 
-     //update task
-     builder.addCase(updateTaskAsync.pending, (state) => {
+    //update task
+    builder.addCase(updateTaskAsync.pending, (state) => {
       state.status = "Loading";
     });
     builder.addCase(updateTaskAsync.fulfilled, (state, action) => {
       state.status = "updated tasks";
       state.tasks = action.payload;
-      
     });
     builder.addCase(updateTaskAsync.rejected, (state, action) => {
       state.status = "error";
       state.error = action.error.message;
     });
 
-     //delete task
-     builder.addCase(deleteTaskAsync.pending, (state) => {
+    //delete task
+    builder.addCase(deleteTaskAsync.pending, (state) => {
       state.status = "Loading";
     });
     builder.addCase(deleteTaskAsync.fulfilled, (state, action) => {
       state.status = "deleted tasks";
       state.tasks = action.payload;
-      
     });
     builder.addCase(deleteTaskAsync.rejected, (state, action) => {
       state.status = "error";

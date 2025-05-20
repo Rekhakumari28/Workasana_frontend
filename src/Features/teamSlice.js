@@ -4,11 +4,13 @@ import axios from "axios";
 export const fetchTeamsAsync = createAsyncThunk(
   "teams/fetchTeamsAsync",
   async () => {
-    const response = await axios.get(
-      "https://workasana-backend-git-main-rekha-kumari-bheels-projects.vercel.app/api/teams"
-    );
+        const token = localStorage.getItem("token"); 
+    const response = await axios.get("https://workasana-backend-git-main-rekha-kumari-bheels-projects.vercel.app/api/teams", {
+      headers: {
+        Authorization: `${token}`, 
+      },
+    });
     const data = response.data;
-
     return data;
   }
 );
@@ -17,9 +19,12 @@ export const addTeamsAsync = createAsyncThunk(
   "teams/addTeamsAsync",
   async ({addTeam}) => {
     console.log(addTeam)
+    const token = localStorage.getItem("token"); 
     const response = await axios.post(
       "https://workasana-backend-git-main-rekha-kumari-bheels-projects.vercel.app/api/teams",
-      addTeam
+      addTeam,  { headers: {
+        Authorization: `${token}`, 
+      },}
     );
     const data = response.data;
     console.log("added data", data)
@@ -29,17 +34,23 @@ export const addTeamsAsync = createAsyncThunk(
 
 export const updateTeamAsync = createAsyncThunk("teams/updateTeamAsync", async({id, updateTeam})=>{
   console.log(updateTeam , id)
+  const token = localStorage.getItem("token"); 
   const response = await axios.put(
     `https://workasana-backend-git-main-rekha-kumari-bheels-projects.vercel.app/api/teams/${id}`,
-    updateTeam
+    updateTeam ,{ headers: {
+      Authorization: `${token}`, 
+    },}
   );
   const data = response.data;
   return data;
 })  
 
 export const deleteTeamAsync = createAsyncThunk("teams/deleteTeamAsync", async({id})=>{
+  const token = localStorage.getItem("token"); 
   const response = await axios.delete(
-    `https://workasana-backend-git-main-rekha-kumari-bheels-projects.vercel.app/api/teams/${id}`  
+    `https://workasana-backend-git-main-rekha-kumari-bheels-projects.vercel.app/api/teams/${id}` ,{ headers: {
+      Authorization: `${token}`, 
+    },} 
   );
   const data = response.data;
   console.log(data, "deleted teams data");

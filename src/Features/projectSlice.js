@@ -3,52 +3,81 @@ import axios from "axios";
 
 export const fetchProjectsAsync = createAsyncThunk(
   "projects/fetchProjectsAsync",
-  async ({projectStatus}) => { 
-    const queryParams = new URLSearchParams();
-
-    if (projectStatus) queryParams.append("status", projectStatus);
+  async ({ projectStatus }) => {
+   const queryParams = new URLSearchParams();
+    const token = localStorage.getItem("token");
+   
+    if (projectStatus) queryParams.append("status", projectStatus || "");
 
     const response = await axios.get(
-      `https://workasana-backend-git-main-rekha-kumari-bheels-projects.vercel.app/api/projects?${queryParams.toString()}`
+      `https://workasana-backend-git-main-rekha-kumari-bheels-projects.vercel.app/api/projects?${queryParams.toString()}`,
+      {
+        headers: {
+          Authorization: `${token}`,
+        },
+      }
     );
-    const data = response.data;
-   
-    return data;
+    const data = response.data.project;
+console.log(response, "res")
+return data
   }
 );
 
 export const addProjectAsync = createAsyncThunk(
   "projects/addProjectAsync",
   async ({ newProject }) => {
+    const token = localStorage.getItem("token");
     const response = await axios.post(
       `https://workasana-backend-git-main-rekha-kumari-bheels-projects.vercel.app/api/projects`,
-      newProject
+      newProject,{ headers: {
+        Authorization: `${token}`, 
+      },}
     );
     const data = response.data;
     return data;
   }
 );
 
-export const updateProjectAsync = createAsyncThunk("project/updateProjectAsync", async({id, updateProject})=>{
-  console.log(id, updateProject)
-  const response = await axios.put(
-    `https://workasana-backend-git-main-rekha-kumari-bheels-projects.vercel.app/api/projects/${id}`,
-    updateProject
-  );
-  const data = response.data;
-  console.log(data, "updated Project data");
-  return data;
-})
+export const updateProjectAsync = createAsyncThunk(
+  "project/updateProjectAsync",
+  async ({ id, updateProject }) => {
+    try {
+      const token = localStorage.getItem("token");
+    console.log(id, updateProject);
+  
+    const response = await axios.put(
+      `https://workasana-backend-git-main-rekha-kumari-bheels-projects.vercel.app/api/projects/${id}`,
+      updateProject,{ headers: {
+        Authorization: `${token}`, 
+      },}
+    );
+    const data = response.data;
+    console.log(data, "updated Project data");
+    return data;
+    } catch (error) {
+      console.log("Error: ", error)
+    }
+  }
+);
 
-export const deleteProjectAsync = createAsyncThunk("project/deleteProjectAsync", async({id})=>{
-  const response = await axios.delete(
-    `https://workasana-backend-git-main-rekha-kumari-bheels-projects.vercel.app/api/projects/${id}`  
-  );
-  const data = response.data;
-  console.log(data, "deleted Project data");
-  return data;
-})
-
+export const deleteProjectAsync = createAsyncThunk(
+  "project/deleteProjectAsync",
+  async ({ id }) => {
+   try {
+    const token = localStorage.getItem("token");
+    const response = await axios.delete(
+      `https://workasana-backend-git-main-rekha-kumari-bheels-projects.vercel.app/api/projects/${id}`,{ headers: {
+        Authorization: `${token}`, 
+      },}
+    );
+    const data = response.data;
+    console.log(data, "deleted Project data");
+    return data;
+   } catch (error) {
+    console.log("Error: ", error)
+   }
+  }
+);
 
 export const projectSlice = createSlice({
   name: "Projects",
@@ -66,7 +95,6 @@ export const projectSlice = createSlice({
     builder.addCase(fetchProjectsAsync.fulfilled, (state, action) => {
       state.status = "All projects";
       state.projects = action.payload;
-    
     });
     builder.addCase(fetchProjectsAsync.rejected, (state, action) => {
       state.status = "error";
@@ -87,33 +115,32 @@ export const projectSlice = createSlice({
       state.error = action.error.message;
     });
 
- //update project
- builder.addCase(updateProjectAsync.pending, (state) => {
-  state.status = "Loading";
-});
-builder.addCase(updateProjectAsync.fulfilled, (state, action) => {
-  state.status = "Project updated";
-  state.projects = action.payload;
-  console.log(action.payload, "payload");
-});
-builder.addCase(updateProjectAsync.rejected, (state, action) => {
-  state.status = "error";
-  state.error = action.error.message;
-});
+    //update project
+    builder.addCase(updateProjectAsync.pending, (state) => {
+      state.status = "Loading";
+    });
+    builder.addCase(updateProjectAsync.fulfilled, (state, action) => {
+      state.status = "Project updated";
+      state.projects = action.payload;
+      console.log(action.payload, "payload");
+    });
+    builder.addCase(updateProjectAsync.rejected, (state, action) => {
+      state.status = "error";
+      state.error = action.error.message;
+    });
 
-//delete Project
-builder.addCase(deleteProjectAsync.pending, (state) => {
-  state.status = "Loading";
-});
-builder.addCase(deleteProjectAsync.fulfilled, (state, action) => {
-  state.status = "Project deleted";
-  state.projects = action.payload;
-});
-builder.addCase(deleteProjectAsync.rejected, (state, action) => {
-  state.status = "error";
-  state.error = action.error.message;
-});
-
+    //delete Project
+    builder.addCase(deleteProjectAsync.pending, (state) => {
+      state.status = "Loading";
+    });
+    builder.addCase(deleteProjectAsync.fulfilled, (state, action) => {
+      state.status = "Project deleted";
+      state.projects = action.payload;
+    });
+    builder.addCase(deleteProjectAsync.rejected, (state, action) => {
+      state.status = "error";
+      state.error = action.error.message;
+    });
   },
 });
 

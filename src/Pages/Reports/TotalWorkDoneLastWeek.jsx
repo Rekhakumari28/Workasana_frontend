@@ -66,9 +66,13 @@ export function WorkDoneBarChart() {
   return (
     <div
       className="container  "
-      style={{ textAlign: "center", width: "600px" }}
+      style={{ textAlign: "center", maxWidth: "600px" }}
     >
       <h4 className="content-heading text-center">Total Work Done Last Week:</h4>
+
+{status === "Loading" && (
+          <p className="text-center p-3 mb-2 bg-primary-subtle text-info-emphasis fw-normal ">Bar char is loading...</p> )}
+
       <Bar data={barChartData} options={options} />
     </div>
   );
