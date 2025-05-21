@@ -17,12 +17,12 @@ export const fetchTeamsAsync = createAsyncThunk(
 
 export const addTeamsAsync = createAsyncThunk(
   "teams/addTeamsAsync",
-  async ({addTeam}) => {
-    console.log(addTeam)
+  async ({name, members}) => {
+    console.log({name, members})
     const token = localStorage.getItem("token"); 
     const response = await axios.post(
       "https://workasana-backend-git-main-rekha-kumari-bheels-projects.vercel.app/api/teams",
-      addTeam,  { headers: {
+      {name, members},  { headers: {
         Authorization: `${token}`, 
       },}
     );

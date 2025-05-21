@@ -1,144 +1,160 @@
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Link, useNavigate, useParams } from "react-router-dom";
-import { addTeamsAsync, updateTeamAsync } from "../../Features/teamSlice";
+import { addTeamsAsync, fetchTeamsAsync, updateTeamAsync } from "../../Features/teamSlice";
 import toast from "react-hot-toast";
+import { addMembersAsync, fetchMembersAsync } from "../../Features/memberSlice";
 
-function AddTeam() {
-  const [teamName, setTeamName] = useState("");
-  const [members, setMembers] = useState([]);
-  const [newMember, setNewMember] = useState("");
-  const dispatch = useDispatch();
-  const teamId = useParams();
-  const navigate = useNavigate();
+
+export function AddMember(){
+ const dispatch = useDispatch();
+  const { teamId } = useParams();
   const { teams } = useSelector((state) => state.teams);
+  const getTeam = teams.find((team) => team._id == teamId);
 
-  const existTeam =
-    teamId &&
-    teams?.length > 0 &&
-    teams?.find((team) => team._id == teamId.teamId);
-  const existing = Boolean(existTeam);
+  const [name, setName] = useState("");
+
+  const { members } = useSelector((state) => state.members);
 
   useEffect(() => {
-    if (existing) {
-      setTeamName(existTeam.name || "");
-      setMembers(existTeam.members || []);
-    }
-  }, [existTeam, existing]);
+    dispatch(fetchMembersAsync());
+  }, [dispatch]);
 
-  const handleAddMember = () => {
-    if (newMember && !members.includes(newMember)) {
-      setMembers((prevMember) => [...prevMember, newMember]);
-      setNewMember("");
+  const handleAddMember = async (e) => {
+    e.preventDefault();
+
+    // Find the member by name
+    const matchedMember = members.find(
+      (member) => member.name === name || member === name
+    );
+
+    if (!matchedMember) {
+      alert("Member not found.");
+      return;
+    }
+
+    const updatedMembers = [
+      ...getTeam.members.map((m) => m._id || m),
+      matchedMember._id || matchedMember,
+    ];
+
+    try {
+      await dispatch(
+        updateTeamAsync({
+          id: getTeam._id,
+          updateTeam: { members: updatedMembers },
+        })
+      ).unwrap();
+
+      setName("");
+
+      window.location.reload()
+    } catch (error) {
+      console.error("Failed to update team:", error);
     }
   };
+return(
+    <div className="modal-body">
+                <form onSubmit={handleAddMember}>
+                  <div className="mb-3">
+                    <label  className="col-form-label">
+                      Members Name:
+                    </label>
+                    <input
+                      type="text"
+                      className="form-control"
+                      id="name"
+                      placeholder="Member Name"
+                      value={name}
+                      onChange={(e) => setName(e.target.value)}
+                    />
+                  </div>
+
+                  <div className="modal-footer">
+                   
+                    <button type="submit" className="btn btn-primary">
+                      Add
+                    </button>
+                  </div>
+                </form>
+              </div>
+)
+}
+
+
+function AddTeam() {
+  const [teamName, setTeamName] = useState(""); 
+  
+  const [selectedMembers, setSelectedMembers] = useState(["", "", ""]);
+ const {members} = useSelector((state)=>state.members)
+  const dispatch = useDispatch();
+  
+const selectMemberHandler = (member)=>{
+  let newMembers = [...members];
+   newMembers =  member;
+    setSelectedMembers(newMembers)
+}
 
   const handleAddTeam = (e) => {
     e.preventDefault();
-    if (existing) {
-      const updateTeam = {
-        name: teamName,
-        members: members,
-      };
+     
 
-      dispatch(updateTeamAsync({ id: teamId.teamId, updateTeam }));
-      toast.success("Team Updated Successfully!");
-      setTimeout(() => {
-        navigate("/dashboard");
-      }, 2000);
-    } else {
-      const addTeam = {
-        name: teamName,
-        members: members,
-      };
-      console.log(addTeam);
-      dispatch(addTeamsAsync({ addTeam }));
-      toast.success("Team added Successfully!");
-      setTimeout(() => {
-        navigate("/teams");
-      }, 2000);
-    }
+    dispatch(addTeamsAsync({
+      name: teamName,
+      members :selectedMembers,
+    }));
+    setTeamName("");
+    setSelectedMembers(["", "", ""]); 
+   window.location.reload() 
   };
 
+   useEffect(() => {
+    dispatch(fetchTeamsAsync());
+    dispatch(fetchMembersAsync())
+  }, [dispatch]);
+
   return (
-    <div className="modal-dialog">
-      <div className="modal-content">
-        <div className="modal-header">
-          <h1 className="modal-title fs-5" id="taskModelLabel">
-            {existing ? "Update Team" : "Create New Team"}{" "}
-          </h1>
-          <button
-            type="button"
-            className="btn-close"
-            data-bs-dismiss="modal"
-            aria-label="Close"
-          ></button>
-        </div>
-        <form onSubmit={handleAddTeam}>
-          <div className="row mt-2">
-            <div className="col-md-3 ">
-              <label htmlFor="projectName" className="ms-2 col-form-label">
-                Team Name
-              </label>
-            </div>
-            <div className="col-md-8">
-              {" "}
-              <input
-                className=" form-control "
-                type="text"
-                placeholder="Enter Team Name"
-                value={teamName}
-                onChange={(e) => setTeamName(e.target.value)}
-              />
-            </div>
-          </div>
-
-          <div className="row">
-            <div className="col-md-3">
-              <label htmlFor="password" className="ms-2 col-form-label">
-                Members
-              </label>
-            </div>
-            <div className="col-md-5">
-              <input
-                className="form-control mt-2"
-                type="text"
-                placeholder="Member Name"
-                value={newMember}
-                onChange={(e) => setNewMember(e.target.value)}
-              />
-            </div>
-            <div className="col-md-3 ">
-              <button
-                type="button"
-                className="btn btn-outline-primary btn-sm mt-2 py-2"
-                onClick={handleAddMember}
-              >
-                Add Member
-              </button>
-            </div>
-
-            <div className="col-md-12">
-              <ul className="list-group my-2">
-                {" "}
-                {members?.length > 0 &&
-                  members.map((member, index) => (
-                    <li className="list-group-item mx-3" key={index}>
-                      {member}
-                    </li>
-                  ))}
-              </ul>
-            </div>
-          </div>
-
-          <div className="modal-footer">
-            <button className="btn btn-primary mx-1 float-end" type="submit">
-              {existing ? "Update" : "Create"}
-            </button>
-          </div>
-        </form>
-      </div>
-    </div>
+   <div className="modal-body">
+                    <form onSubmit={handleAddTeam}>
+                      <div className="mb-3">
+                        <label  className="col-form-label">
+                          Team Name:
+                        </label>
+                        <input
+                          type="text"
+                          className="form-control"
+                          id="recipient-name"
+                          placeholder="Enter Team Name"
+                          value={teamName}
+                          onChange={(e) => setTeamName(e.target.value)}
+                        />
+                      </div>
+                      <div className="mb-3">
+                        <label className="col-form-label">
+                          Add Members:
+                        </label>
+                        {members?.map((member) => (
+                          <label  key={member._id} >
+                          <input
+                           
+                            type="checkbox"
+                            className="input-check my-3 ms-3"
+                            placeholder={`Member `}
+                            value={member._id}
+                            onChange={(e) =>                       
+                              selectMemberHandler(e.target.value)
+                            }
+                          />{" "} {member.name}</label>
+                        ))}
+                      </div>
+                      <div className="modal-footer">
+                       
+                        <button type="submit" className="btn btn-primary">
+                          Save Team
+                        </button>
+                      </div>
+                    </form>
+                  </div>
   );
 }
 

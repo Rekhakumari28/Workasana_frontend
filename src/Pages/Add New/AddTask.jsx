@@ -79,9 +79,7 @@ function AddTask() {
 
       dispatch(updateTaskAsync({ id: taskId.taskId, updateTask }));
       toast.success("Task Updated successfully!");
-      setTimeout(() => {
-        navigate("/settings");
-      }, 2000);
+       document.querySelector("#addNewTask .btn-close").click();
     } else {
       const newTask = {
         name: taskName,
@@ -96,9 +94,7 @@ function AddTask() {
 
       dispatch(addTasksAsync({ newTask }));
       toast.success("New task created successfully!");
-      setTimeout(() => {
-        navigate("/dashboard");
-      }, 2000);
+       document.querySelector("#addNewTask .btn-close").click();
     }
   };
 

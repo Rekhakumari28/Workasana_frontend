@@ -7,6 +7,7 @@ import AddTeam from "../Add New/AddTeam";
 
 function Teams() {
   const dispatch = useDispatch();
+  
   const { teams, status, error } = useSelector((state) => state.teams);
 
   useEffect(() => {
@@ -58,31 +59,43 @@ function Teams() {
           >
        <i className="bi bi-list"></i>
           </button>
-          <section className="pb-3 px-2">
-            <div className="py-1 ">
-              <span className="fw-bold fs-2 heading-color">Teams </span>
-              <button
-                type="button"
-        className="btn btn-primary float-end ms-auto me-2"
-        data-bs-toggle="modal"
-        data-bs-target="#addNewTeam"
-        data-bs-whatever="@mdo"
-              >
-                + New Team
-              </button>
+         <div className="d-flex py-3">
+            <h2>Teams</h2>
+            <button
+              type="button"
+              className="btn btn-primary ms-auto"
+              data-bs-toggle="modal"
+              data-bs-target="#exampleModal"
+              data-bs-whatever="@mdo"
+            >
+              + New Team
+            </button>
+
+            <div
+              className="modal fade"
+              id="exampleModal"
+              tabIndex="-1"
+              aria-labelledby="exampleModalLabel"
+              aria-hidden="true"
+            >
+              <div className="modal-dialog">
+                <div className="modal-content">
+                  <div className="modal-header">
+                    <h1 className="modal-title fs-5" id="exampleModalLabel">
+                      Create New Team 
+                    </h1>
+                    <button
+                      type="button"
+                      className="btn-close"
+                      data-bs-dismiss="modal"
+                      aria-label="Close"
+                    ></button>
+                  </div>
+                  <AddTeam />
+                </div>
+              </div>
             </div>
-            <div className="py-1">
-               <div
-        className="modal fade"
-        id="addNewTeam"
-        tabIndex="-1"
-        aria-labelledby="teamModelLabel"
-        aria-hidden="true"
-      >
-        <AddTeam />
-      </div>
-            </div>
-          </section>
+          </div>
           <section className="pb-3 px-2">
             <div className="row">
                 {status === "Loading" &&  <p className="text-center p-3 mb-2 bg-primary-subtle text-info-emphasis fw-normal ">
@@ -143,9 +156,9 @@ function Teams() {
                                 marginRight: "-10px",
                                 paddingBottom: "8px",
                               }}
-                            >
-                              {team?.members[0]?.charAt(0)
-                                ? team?.members[0]?.charAt(0)
+                            > 
+                              {team?.members[0]?.name.charAt(0)
+                                ? team?.members[0]?.name.charAt(0)
                                 : "P"}
                             </span>{" "}
                             <span
