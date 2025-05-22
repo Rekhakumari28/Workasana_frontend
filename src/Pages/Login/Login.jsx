@@ -4,6 +4,7 @@ import toast, { Toaster } from "react-hot-toast";
 import { useDispatch } from "react-redux";
 import { Link, useNavigate } from "react-router-dom";
 import { userLoginAsync } from "../../Features/userSlice";
+import ShowHindPassword from "../../Components/ShowHindPassword";
 
 function Login() {
   const [email, setEmail] = useState("");
@@ -30,11 +31,12 @@ function Login() {
   return (
     <div className="d-flex justify-content-center align-items-center vh-100">
       <div
-        className="card shadow-lg border-0 p-4 rounded-4"
+        className="card  border-0 p-4 "
         style={{ width: "400px", backgroundColor: "#ffffff" }}
       >
-        <h2 className="fs-3 heading-color text-center mb-4">Workasana</h2>
-        <p className="text-center text-muted mb-4">Log in to your account</p>
+         <h4 className="heading-color text-center mb-3">Workasana</h4>
+        <h2 className="text-center">Log in to your account</h2>
+        <p className="text-center text-muted mb-4">Please enter your details.</p>      
 
         <form onSubmit={handleUserLoginForm}>
           <label htmlFor="email" className="form-label fw-semibold">Email</label>
@@ -49,13 +51,7 @@ function Login() {
 
           <label htmlFor="password" className="form-label fw-semibold">Password</label>
 
-          <input
-            className=" form-control"
-            type="password"
-            placeholder="Password"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-          />
+          <ShowHindPassword  value={password} onChange={(event)=>setPassword(event.target.value)}/>
 
           <div className="d-grid my-2">
             <button className="btn btn-primary " type="submit">
@@ -70,7 +66,7 @@ function Login() {
               Guest Login
             </button>
           </div>
-          <p>
+          <p className="text-center">
             Don't have an account? <Link to="/signup" className="text-decoration-none fw-semibold ">SignUp</Link>
           </p>
         </form>

@@ -20,12 +20,14 @@ export const fetchUserAsync = createAsyncThunk(
 
 export const registerUserAsync = createAsyncThunk(
   "users/registerUserAsync",
-  async ({ newUser }) => {
+  async (credentials) => {
     const response = await axios.post(
       `${workasana_URL}/users/register`,
-      newUser
+     credentials
     );
     const data = response.data;
+     console.log("signup response:", response.data);
+    localStorage.setItem("token", response.data.token);
     console.log(data, "data submit");
     return data;
   }
