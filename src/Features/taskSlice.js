@@ -1,5 +1,6 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import axios from "axios";
+import { workasana_URL } from "./userSlice";
 
 export const fetchTasksAsync = createAsyncThunk(
   "tasks/fetchTasksAsync",
@@ -12,7 +13,7 @@ export const fetchTasksAsync = createAsyncThunk(
 
     const token = localStorage.getItem("token");
     const response = await axios.get(
-      `https://workasana-backend-git-main-rekha-kumari-bheels-projects.vercel.app/api/tasks?${queryParams.toString()}`,
+      `${workasana_URL}/tasks?${queryParams.toString()}`,
       {
         headers: {
           Authorization: `${token}`,
@@ -29,7 +30,7 @@ export const addTasksAsync = createAsyncThunk(
   async ({ newTask }) => {
     const token = localStorage.getItem("token");
     const response = await axios.post(
-      `https://workasana-backend-git-main-rekha-kumari-bheels-projects.vercel.app/api/tasks`,
+      `${workasana_URL}/tasks`,
       newTask,
       {
         headers: {
@@ -47,7 +48,7 @@ export const updateTaskAsync = createAsyncThunk(
   async ({ id, updateTask }) => {
     const token = localStorage.getItem("token");
     const response = await axios.put(
-      `https://workasana-backend-git-main-rekha-kumari-bheels-projects.vercel.app/api/tasks/${id}`,
+      `${workasana_URL}/tasks/${id}`,
       updateTask,{ headers: {
         Authorization: `${token}`, 
       },}
@@ -62,7 +63,7 @@ export const deleteTaskAsync = createAsyncThunk(
   async ({ id }) => {
     const token = localStorage.getItem("token");
     const response = await axios.delete(
-      `https://workasana-backend-git-main-rekha-kumari-bheels-projects.vercel.app/api/tasks/${id}`,{ headers: {
+      `${workasana_URL}/tasks/${id}`,{ headers: {
         Authorization: `${token}`, 
       },}
     );

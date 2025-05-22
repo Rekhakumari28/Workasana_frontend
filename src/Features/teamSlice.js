@@ -1,13 +1,14 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import axios from "axios";
+import { workasana_URL } from "./userSlice";
 
 export const fetchTeamsAsync = createAsyncThunk(
   "teams/fetchTeamsAsync",
   async () => {
-        const token = localStorage.getItem("token"); 
-    const response = await axios.get("https://workasana-backend-git-main-rekha-kumari-bheels-projects.vercel.app/api/teams", {
+    const token = localStorage.getItem("token");
+    const response = await axios.get(`${workasana_URL}/teams`, {
       headers: {
-        Authorization: `${token}`, 
+        Authorization: `${token}`,
       },
     });
     const data = response.data;
@@ -17,46 +18,57 @@ export const fetchTeamsAsync = createAsyncThunk(
 
 export const addTeamsAsync = createAsyncThunk(
   "teams/addTeamsAsync",
-  async ({name, members}) => {
-    console.log({name, members})
-    const token = localStorage.getItem("token"); 
+  async ({ name, members }) => {
+    console.log({ name, members });
+    const token = localStorage.getItem("token");
     const response = await axios.post(
-      "https://workasana-backend-git-main-rekha-kumari-bheels-projects.vercel.app/api/teams",
-      {name, members},  { headers: {
-        Authorization: `${token}`, 
-      },}
+      `${workasana_URL}/teams`,
+      { name, members },
+      {
+        headers: {
+          Authorization: `${token}`,
+        },
+      }
     );
     const data = response.data;
-    console.log("added data", data)
+    console.log("added data", data);
     return data;
   }
 );
 
-export const updateTeamAsync = createAsyncThunk("teams/updateTeamAsync", async({id, updateTeam})=>{
-  console.log(updateTeam , id)
-  const token = localStorage.getItem("token"); 
-  const response = await axios.put(
-    `https://workasana-backend-git-main-rekha-kumari-bheels-projects.vercel.app/api/teams/${id}`,
-    updateTeam ,{ headers: {
-      Authorization: `${token}`, 
-    },}
-  );
-  const data = response.data;
-  return data;
-})  
+export const updateTeamAsync = createAsyncThunk(
+  "teams/updateTeamAsync",
+  async ({ id, updateTeam }) => {
+    console.log(updateTeam, id);
+    const token = localStorage.getItem("token");
+    const response = await axios.put(
+      `${workasana_URL}/teams/${id}`,
+      updateTeam,
+      {
+        headers: {
+          Authorization: `${token}`,
+        },
+      }
+    );
+    const data = response.data;
+    return data;
+  }
+);
 
-export const deleteTeamAsync = createAsyncThunk("teams/deleteTeamAsync", async({id})=>{
-  const token = localStorage.getItem("token"); 
-  const response = await axios.delete(
-    `https://workasana-backend-git-main-rekha-kumari-bheels-projects.vercel.app/api/teams/${id}` ,{ headers: {
-      Authorization: `${token}`, 
-    },} 
-  );
-  const data = response.data;
-  console.log(data, "deleted teams data");
-  return data;
-})
-
+export const deleteTeamAsync = createAsyncThunk(
+  "teams/deleteTeamAsync",
+  async ({ id }) => {
+    const token = localStorage.getItem("token");
+    const response = await axios.delete(`${workasana_URL}/teams/${id}`, {
+      headers: {
+        Authorization: `${token}`,
+      },
+    });
+    const data = response.data;
+    console.log(data, "deleted teams data");
+    return data;
+  }
+);
 
 export const teamSlice = createSlice({
   name: "teams",

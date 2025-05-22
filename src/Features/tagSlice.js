@@ -1,12 +1,13 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import axios from "axios";
+import { workasana_URL } from "./userSlice";
 
 export const fetchTagsAsync = createAsyncThunk(
   "tags/fetchTagsAsync",
   async () => {
     const token = localStorage.getItem("token");
     const response = await axios.get(
-      `https://workasana-backend-git-main-rekha-kumari-bheels-projects.vercel.app/api/tags`,{ headers: {
+      `${workasana_URL}/tags`,{ headers: {
         Authorization: `${token}`, 
       },}
     );
@@ -20,7 +21,7 @@ export const addTagsAsync = createAsyncThunk(
   async (newTag) => {
     const token = localStorage.getItem("token");
     const response = await axios.post(
-      `https://workasana-backend-git-main-rekha-kumari-bheels-projects.vercel.app/api/tags`,
+      `${workasana_URL}/tags`,
       newTag,{ headers: {
         Authorization: `${token}`, 
       },}
