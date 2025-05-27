@@ -9,13 +9,14 @@ import { deleteTaskAsync, fetchTasksAsync } from "../../Features/taskSlice";
 import { Link, useNavigate } from "react-router-dom";
 import toast from "react-hot-toast";
 import Sidenav from "../../Components/Sidenav";
+import AddProject from "../Add New/AddProject";
 
 function Settings() {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const { projects } = useSelector((state) => {
-    console.log(state.projects)
-    return state.projects
+    console.log(state.projects);
+    return state.projects;
   });
   const { teams } = useSelector((state) => state.teams);
   const { tasks } = useSelector((state) => state.tasks);
@@ -26,7 +27,6 @@ function Settings() {
     dispatch(fetchProjectsAsync({ projectStatus }));
   }, [projectStatus]);
   useEffect(() => {
-   
     dispatch(fetchTeamsAsync());
     dispatch(fetchTasksAsync());
   }, []);
@@ -96,7 +96,7 @@ function Settings() {
         </div>
 
         <div className="col-12 col-md-9 col-lg-10 p-4">
-            <button
+          <button
             className="btn btn-outline-primary d-md-none mb-3"
             type="button"
             data-bs-toggle="offcanvas"
@@ -130,8 +130,29 @@ function Settings() {
                           <span> {project.name}</span>
                         </div>
                         <div className="col-md-6">
-                          <Link
+                          <button
+                            type="button"
+                            class="btn btn-outline-secondary btn-sm"
+                            data-bs-toggle="modal"
+                            data-bs-target="#addNewProject"
+                            data-bs-whatever="@mdo"                            
+                          >
+                             <svg
+                              xmlns="http://www.w3.org/2000/svg"
+                              width="16"
+                              height="16"
+                              fill="currentColor"
+                              className="bi bi-pencil"
+                              viewBox="0 0 16 16"
+                            >
+                              <path d="M12.146.146a.5.5 0 0 1 .708 0l3 3a.5.5 0 0 1 0 .708l-10 10a.5.5 0 0 1-.168.11l-5 2a.5.5 0 0 1-.65-.65l2-5a.5.5 0 0 1 .11-.168zM11.207 2.5 13.5 4.793 14.793 3.5 12.5 1.207zm1.586 3L10.5 3.207 4 9.707V10h.5a.5.5 0 0 1 .5.5v.5h.5a.5.5 0 0 1 .5.5v.5h.293zm-9.761 5.175-.106.106-1.528 3.821 3.821-1.528.106-.106A.5.5 0 0 1 5 12.5V12h-.5a.5.5 0 0 1-.5-.5V11h-.5a.5.5 0 0 1-.468-.325" />
+                            </svg>{" "}
+                             Edit
+                          </button>
+                          {/* <Link
                             className="btn btn-outline-secondary btn-sm"
+                            
+                            
                             to={`/addProject/${project._id}`}
                           >
                             <svg
@@ -145,7 +166,7 @@ function Settings() {
                               <path d="M12.146.146a.5.5 0 0 1 .708 0l3 3a.5.5 0 0 1 0 .708l-10 10a.5.5 0 0 1-.168.11l-5 2a.5.5 0 0 1-.65-.65l2-5a.5.5 0 0 1 .11-.168zM11.207 2.5 13.5 4.793 14.793 3.5 12.5 1.207zm1.586 3L10.5 3.207 4 9.707V10h.5a.5.5 0 0 1 .5.5v.5h.5a.5.5 0 0 1 .5.5v.5h.293zm-9.761 5.175-.106.106-1.528 3.821 3.821-1.528.106-.106A.5.5 0 0 1 5 12.5V12h-.5a.5.5 0 0 1-.5-.5V11h-.5a.5.5 0 0 1-.468-.325" />
                             </svg>{" "}
                             Edit
-                          </Link>{" "}
+                          </Link>{" "} */}
                           <button
                             className="btn btn-outline-danger btn-sm"
                             onClick={() => handleDeleteProject(project._id)}
@@ -166,9 +187,20 @@ function Settings() {
                         </div>
                       </div>
                     </div>
+                     <div
+                      className="modal fade"
+                      id="addNewProject"
+                      tabIndex="-1"
+                      aria-labelledby="projectModelLabel"
+                      aria-hidden="true"
+                    >
+                      <AddProject projectId={project._id} />
+                    </div>
                   </div>
+                  
                 ))}
             </div>
+            
           </section>
 
           <section className="pb-3 px-2">

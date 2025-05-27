@@ -146,10 +146,45 @@
   right: 0;
   background: rgba(0, 0, 0, 0.7);
   transition: opacity 500ms;
-} */
+}
+
 
 /* 
-.login-overlay {
+
+
+.text-decoration-0{
+  text-decoration: none;
+}
+
+
+.icon-colors{
+  background-color:antiquewhite;
+  color: brown;
+  padding: 5px;
+
+}
+
+.user{
+  position: relative;
+  top: 1px;
+  display: inline-block;
+  font-family: 'Glyphicons Halflings';
+  font-style: normal;
+  font-weight: 400;
+  line-height: 1;
+  -webkit-font-smoothing: antialiased;
+}
+
+.bg-emphasise-purple-text-purple{
+  color:#924edf;
+background-color: #e5d7f5;
+}
+
+.margin-1{
+  margin: 6px 0
+} */
+
+/* .login-overlay {
   z-index: 3;
   background: rgba(0, 0, 0, 0.7);
   position: fixed;
@@ -201,36 +236,4 @@
   .popup {
     width: 70%;
   }
-}
-
-.text-decoration-0{
-  text-decoration: none;
-}
-
-
-.icon-colors{
-  background-color:antiquewhite;
-  color: brown;
-  padding: 5px;
-
-}
-
-.user{
-  position: relative;
-  top: 1px;
-  display: inline-block;
-  font-family: 'Glyphicons Halflings';
-  font-style: normal;
-  font-weight: 400;
-  line-height: 1;
-  -webkit-font-smoothing: antialiased;
-}
-
-.bg-emphasise-purple-text-purple{
-  color:#924edf;
-background-color: #e5d7f5;
-}
-
-.margin-1{
-  margin: 6px 0
 } */

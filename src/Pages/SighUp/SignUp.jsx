@@ -4,7 +4,7 @@ import toast, { Toaster } from "react-hot-toast";
 import { useDispatch } from "react-redux";
 import { Link, useNavigate } from "react-router-dom";
 import { registerUserAsync, userLoginAsync } from "../../Features/userSlice";
-import ShowHindPassword from "../../Components/ShowHindPassword";
+import ShowHidePassword from "../../Components/ShowHidePassword";
 
 function Register() {
     const [name, setName] = useState("")
@@ -70,7 +70,7 @@ function Register() {
           />
 
           <label htmlFor="password" className="form-label fw-semibold mb-1 mt-3">Password</label>
-<ShowHindPassword value={password} onChange={(event)=>setPassword(event.target.value)} />
+<ShowHidePassword value={password} onChange={(event)=>setPassword(event.target.value)} />
           <div className="d-grid my-2">
             <button className="btn btn-primary " type="submit">
               Sign in

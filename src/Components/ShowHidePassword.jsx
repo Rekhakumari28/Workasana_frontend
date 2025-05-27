@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 
-function ShowHindPassword(props) {
+function ShowHidePassword(props) {
   const [showPassword, setShowPassword] = useState(false);
 
   const togglePasswordVisibility = () => {
@@ -52,4 +52,4 @@ function ShowHindPassword(props) {
   );
 }
 
-export default ShowHindPassword;
+export default ShowHidePassword;

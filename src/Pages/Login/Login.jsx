@@ -4,7 +4,7 @@ import toast, { Toaster } from "react-hot-toast";
 import { useDispatch } from "react-redux";
 import { Link, useNavigate } from "react-router-dom";
 import { userLoginAsync } from "../../Features/userSlice";
-import ShowHindPassword from "../../Components/ShowHindPassword";
+import ShowHidePassword from "../../Components/ShowHidePassword";
 
 function Login() {
   const [email, setEmail] = useState("");
@@ -24,8 +24,18 @@ function Login() {
   };
 
   const guestLoginHandler = async () => {
-    setEmail("rekha12345@gmail.com");
-    setPassword("rekha12345");
+    try {
+      const guestEmail = "guest1@example.com"
+      const guestPassword= "guest1"
+    setEmail(guestEmail);
+    setPassword(guestPassword);
+       console.log(email, password)
+      await dispatch(userLoginAsync({ email, password })).unwrap();
+      toast.success("Login successful!");
+      navigate("/dashboard");
+    } catch (error) {
+      toast.error("Invalid credentials!");
+    }
   };
 
   return (
@@ -51,7 +61,7 @@ function Login() {
 
           <label htmlFor="password" className="form-label fw-semibold">Password</label>
 
-          <ShowHindPassword  value={password} onChange={(event)=>setPassword(event.target.value)}/>
+          <ShowHidePassword  value={password} onChange={(event)=>setPassword(event.target.value)}/>
 
           <div className="d-grid my-2">
             <button className="btn btn-primary " type="submit">

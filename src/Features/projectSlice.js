@@ -20,7 +20,7 @@ export const fetchProjectsAsync = createAsyncThunk(
       }
     );
     const data = response.data.project;
-    console.log(response, "res");
+   
     return data;
   }
 );
@@ -39,6 +39,7 @@ export const addProjectAsync = createAsyncThunk(
       }
     );
     const data = response.data;
+  
     return data;
   }
 );

@@ -7,19 +7,20 @@ import {
 import toast, { Toaster } from "react-hot-toast";
 import { Link, useNavigate, useParams } from "react-router-dom";
 
-function AddProject() {
+function AddProject({projectId}) {
   const [projectName, setProjectName] = useState("");
   const [projectDescription, setProjectDescription] = useState("");
   const [status, setStatus] = useState("");
   const navigate = useNavigate();
-  const projectId = useParams();
+  
+
   const dispatch = useDispatch();
   const { projects } = useSelector((state) => state.projects);
 
   const projectExist =
     projectId &&
     projects?.length > 0 &&
-    projects?.find((project) => project._id == projectId.projectId);
+    projects?.find((project) => project._id == projectId);
   const existing = Boolean(projectExist);
 
   useEffect(() => {
@@ -39,8 +40,9 @@ function AddProject() {
         status: status,
       };
 
-      dispatch(updateProjectAsync({ id: projectId.projectId, updateProject }));
+      dispatch(updateProjectAsync({ id: projectId, updateProject }));
       toast.success("Project Updated Successfully!");
+       window.location.reload()
       navigate("/settings");
     } else {
       const newProject = {
@@ -54,14 +56,15 @@ function AddProject() {
       navigate("/dashboard");
     }
   };
+  
 
   return (
 
-    <div className="modal-dialog">
+       <div className="modal-dialog">
       <div className="modal-content">
         <div className="modal-header">
           <h1 className="modal-title fs-5" id="projectModelLabel">
-            Create New Project
+            {existing ? "Edit Project" : "Create New Project"}
           </h1>
           <button
             type="button"
@@ -124,6 +127,7 @@ function AddProject() {
            <Toaster />
         </div>
       </div>
+      
     </div>
   );
 }
