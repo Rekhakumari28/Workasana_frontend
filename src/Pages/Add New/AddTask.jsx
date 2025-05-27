@@ -10,7 +10,7 @@ import { addTasksAsync, updateTaskAsync } from "../../Features/taskSlice";
 import { fetchUserAsync } from "../../Features/userSlice";
 import toast, { Toaster } from "react-hot-toast";
 
-function AddTask() {
+function AddTask({taskId}) {
   const [projectName, setProjectName] = useState("");
   const [taskName, setTaskName] = useState("");
   const [teamName, setTeam] = useState("");
@@ -21,7 +21,6 @@ function AddTask() {
   const [priority, setPriority] = useState("");
   const [taskStatus, setTaskStatus] = useState("");
 
-  const taskId = useParams();
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const { projects } = useSelector((state) => state.projects);
@@ -32,7 +31,7 @@ function AddTask() {
   const existingTask =
     taskId &&
     tasks?.length > 0 &&
-    tasks?.find((task) => task._id == taskId.taskId);
+    tasks?.find((task) => task._id == taskId);
 
   const existing = Boolean(existingTask);
 
@@ -77,7 +76,7 @@ function AddTask() {
         status: taskStatus,
       };
 
-      dispatch(updateTaskAsync({ id: taskId.taskId, updateTask }));
+      dispatch(updateTaskAsync({ id: taskId, updateTask }));
       toast.success("Task Updated successfully!");
        document.querySelector("#addNewTask .btn-close").click();
     } else {

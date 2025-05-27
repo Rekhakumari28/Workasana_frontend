@@ -6,9 +6,9 @@ import toast from "react-hot-toast";
 import { addMembersAsync, fetchMembersAsync } from "../../Features/memberSlice";
 
 
-export function AddMember(){
+export function AddMember({teamId}){
  const dispatch = useDispatch();
-  const { teamId } = useParams();
+ 
   const { teams } = useSelector((state) => state.teams);
   const getTeam = teams.find((team) => team._id == teamId);
 

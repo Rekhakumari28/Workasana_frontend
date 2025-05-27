@@ -10,6 +10,8 @@ import { Link, useNavigate } from "react-router-dom";
 import toast from "react-hot-toast";
 import Sidenav from "../../Components/Sidenav";
 import AddProject from "../Add New/AddProject";
+import AddTask from "../Add New/AddTask";
+import AddTeam from "../Add New/AddTeam";
 
 function Settings() {
   const dispatch = useDispatch();
@@ -135,25 +137,7 @@ function Settings() {
                             class="btn btn-outline-secondary btn-sm"
                             data-bs-toggle="modal"
                             data-bs-target="#addNewProject"
-                            data-bs-whatever="@mdo"                            
-                          >
-                             <svg
-                              xmlns="http://www.w3.org/2000/svg"
-                              width="16"
-                              height="16"
-                              fill="currentColor"
-                              className="bi bi-pencil"
-                              viewBox="0 0 16 16"
-                            >
-                              <path d="M12.146.146a.5.5 0 0 1 .708 0l3 3a.5.5 0 0 1 0 .708l-10 10a.5.5 0 0 1-.168.11l-5 2a.5.5 0 0 1-.65-.65l2-5a.5.5 0 0 1 .11-.168zM11.207 2.5 13.5 4.793 14.793 3.5 12.5 1.207zm1.586 3L10.5 3.207 4 9.707V10h.5a.5.5 0 0 1 .5.5v.5h.5a.5.5 0 0 1 .5.5v.5h.293zm-9.761 5.175-.106.106-1.528 3.821 3.821-1.528.106-.106A.5.5 0 0 1 5 12.5V12h-.5a.5.5 0 0 1-.5-.5V11h-.5a.5.5 0 0 1-.468-.325" />
-                            </svg>{" "}
-                             Edit
-                          </button>
-                          {/* <Link
-                            className="btn btn-outline-secondary btn-sm"
-                            
-                            
-                            to={`/addProject/${project._id}`}
+                            data-bs-whatever="@mdo"
                           >
                             <svg
                               xmlns="http://www.w3.org/2000/svg"
@@ -166,7 +150,8 @@ function Settings() {
                               <path d="M12.146.146a.5.5 0 0 1 .708 0l3 3a.5.5 0 0 1 0 .708l-10 10a.5.5 0 0 1-.168.11l-5 2a.5.5 0 0 1-.65-.65l2-5a.5.5 0 0 1 .11-.168zM11.207 2.5 13.5 4.793 14.793 3.5 12.5 1.207zm1.586 3L10.5 3.207 4 9.707V10h.5a.5.5 0 0 1 .5.5v.5h.5a.5.5 0 0 1 .5.5v.5h.293zm-9.761 5.175-.106.106-1.528 3.821 3.821-1.528.106-.106A.5.5 0 0 1 5 12.5V12h-.5a.5.5 0 0 1-.5-.5V11h-.5a.5.5 0 0 1-.468-.325" />
                             </svg>{" "}
                             Edit
-                          </Link>{" "} */}
+                          </button>
+                        
                           <button
                             className="btn btn-outline-danger btn-sm"
                             onClick={() => handleDeleteProject(project._id)}
@@ -187,7 +172,7 @@ function Settings() {
                         </div>
                       </div>
                     </div>
-                     <div
+                    <div
                       className="modal fade"
                       id="addNewProject"
                       tabIndex="-1"
@@ -197,10 +182,8 @@ function Settings() {
                       <AddProject projectId={project._id} />
                     </div>
                   </div>
-                  
                 ))}
             </div>
-            
           </section>
 
           <section className="pb-3 px-2">
@@ -216,11 +199,14 @@ function Settings() {
                           <span> {team.name}</span>
                         </div>
                         <div className="col-md-6">
-                          <Link
-                            className="btn btn-outline-secondary btn-sm"
-                            to={`/addTeam/${team._id}`}
-                          >
-                            <svg
+                           <button
+              type="button"
+              className="btn btn-outline-secondary btn-sm"
+              data-bs-toggle="modal"
+              data-bs-target="#exampleModal"
+              data-bs-whatever="@mdo"
+            >
+             <svg
                               xmlns="http://www.w3.org/2000/svg"
                               width="16"
                               height="16"
@@ -231,7 +217,8 @@ function Settings() {
                               <path d="M12.146.146a.5.5 0 0 1 .708 0l3 3a.5.5 0 0 1 0 .708l-10 10a.5.5 0 0 1-.168.11l-5 2a.5.5 0 0 1-.65-.65l2-5a.5.5 0 0 1 .11-.168zM11.207 2.5 13.5 4.793 14.793 3.5 12.5 1.207zm1.586 3L10.5 3.207 4 9.707V10h.5a.5.5 0 0 1 .5.5v.5h.5a.5.5 0 0 1 .5.5v.5h.293zm-9.761 5.175-.106.106-1.528 3.821 3.821-1.528.106-.106A.5.5 0 0 1 5 12.5V12h-.5a.5.5 0 0 1-.5-.5V11h-.5a.5.5 0 0 1-.468-.325" />
                             </svg>{" "}
                             Edit
-                          </Link>{" "}
+            </button>
+                          
                           <button
                             className="btn btn-outline-danger btn-sm"
                             onClick={() => handleDeleteTeam(team._id)}
@@ -252,6 +239,30 @@ function Settings() {
                         </div>
                       </div>
                     </div>
+                    <div
+              className="modal fade"
+              id="exampleModal"
+              tabIndex="-1"
+              aria-labelledby="exampleModalLabel"
+              aria-hidden="true"
+            >
+              <div className="modal-dialog">
+                <div className="modal-content">
+                  <div className="modal-header">
+                    <h1 className="modal-title fs-5" id="exampleModalLabel">
+                      Create New Team 
+                    </h1>
+                    <button
+                      type="button"
+                      className="btn-close"
+                      data-bs-dismiss="modal"
+                      aria-label="Close"
+                    ></button>
+                  </div>
+                  <AddTeam teamId={team._id}/>
+                </div>
+              </div>
+            </div>                    
                   </div>
                 ))}
             </div>
@@ -270,9 +281,12 @@ function Settings() {
                           <span>{task.name}</span>
                         </div>
                         <div className="col-md-6">
-                          <Link
+                          <button
+                            type="button"
                             className="btn btn-outline-secondary btn-sm"
-                            to={`/addTask/${task._id}`}
+                            data-bs-toggle="modal"
+                            data-bs-target="#addNewTask"
+                            data-bs-whatever="@mdo"
                           >
                             <svg
                               xmlns="http://www.w3.org/2000/svg"
@@ -285,7 +299,8 @@ function Settings() {
                               <path d="M12.146.146a.5.5 0 0 1 .708 0l3 3a.5.5 0 0 1 0 .708l-10 10a.5.5 0 0 1-.168.11l-5 2a.5.5 0 0 1-.65-.65l2-5a.5.5 0 0 1 .11-.168zM11.207 2.5 13.5 4.793 14.793 3.5 12.5 1.207zm1.586 3L10.5 3.207 4 9.707V10h.5a.5.5 0 0 1 .5.5v.5h.5a.5.5 0 0 1 .5.5v.5h.293zm-9.761 5.175-.106.106-1.528 3.821 3.821-1.528.106-.106A.5.5 0 0 1 5 12.5V12h-.5a.5.5 0 0 1-.5-.5V11h-.5a.5.5 0 0 1-.468-.325" />
                             </svg>{" "}
                             Edit
-                          </Link>{" "}
+                          </button>
+                         
                           <button
                             className="btn btn-outline-danger btn-sm"
                             onClick={() => handleDeleteTask(task._id)}
@@ -306,6 +321,15 @@ function Settings() {
                         </div>
                       </div>
                     </div>
+                     <div
+        className="modal fade"
+        id="addNewTask"
+        tabIndex="-1"
+        aria-labelledby="taskModelLabel"
+        aria-hidden="true"
+      >
+        <AddTask taskId = {task._id}/>
+      </div>
                   </div>
                 ))}
             </div>
