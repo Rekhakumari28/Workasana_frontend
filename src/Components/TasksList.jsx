@@ -42,15 +42,7 @@ function TasksList({searchQuery}) {
           <option value="Blocked">Blocked</option>
         </select></div>
     <div className="col-md-3">
-      <div
-        className="modal fade"
-        id="addNewTask"
-        tabIndex="-1"
-        aria-labelledby="taskModelLabel"
-        aria-hidden="true"
-      >
-        <AddTask />
-      </div>
+      
     </div>
     <div className="col-md-3"> <button
         type="button"
@@ -129,6 +121,15 @@ function TasksList({searchQuery}) {
               </div>
             </div>
           ))}
+          <div
+        className="modal fade"
+        id="addNewTask"
+        tabIndex="-1"
+        aria-labelledby="taskModelLabel"
+        // aria-hidden="true"
+      >
+        <AddTask />
+      </div>
         <Toaster />
       </div>
     </div>

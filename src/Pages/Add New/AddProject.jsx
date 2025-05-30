@@ -34,26 +34,25 @@ function AddProject({projectId}) {
   const handleAddProject = (e) => {
     e.preventDefault();
     if (existing) {
-      const updateProject = {
-        name: projectName,
+     
+      dispatch(updateProjectAsync({ id: projectId, name: projectName,
         description: projectDescription,
-        status: status,
-      };
-
-      dispatch(updateProjectAsync({ id: projectId, updateProject }));
+        status: status }));
       toast.success("Project Updated Successfully!");
-       window.location.reload()
-      navigate("/settings");
-    } else {
-      const newProject = {
-        name: projectName,
-        description: projectDescription,
-        status: status,
-      };
-      dispatch(addProjectAsync({ newProject }));
-      toast.success("Project Created Successfully!");
+     setTimeout(() => {
       window.location.reload()
-      navigate("/dashboard");
+      navigate("/dashboard")
+     }, 2000);
+    } else {     
+      dispatch(addProjectAsync({name: projectName,
+        description: projectDescription,
+        status: status}));
+      toast.success("Project Created Successfully!");
+       setTimeout(() => {
+      window.location.reload()
+     
+     }, 2000);
+     
     }
   };
   
@@ -80,11 +79,11 @@ function AddProject({projectId}) {
                 Project Name
               </label>
               <input
+                onChange={(e) => setProjectName(e.target.value)}
                 type="text"
                 className="form-control"
                 placeholder="Enter Project Name"
-                value={projectName}
-                onChange={(e) => setProjectName(e.target.value)}
+               value= {existing ? projectName : ""}
               />
             </div>
             <div className="mb-2">
@@ -95,8 +94,8 @@ function AddProject({projectId}) {
               <textarea
                 className="form-control"
                 placeholder="Enter Project Description"
-                value={projectDescription}
                 onChange={(e) => setProjectDescription(e.target.value)}
+               value= {existing ? projectDescription : ""}
               ></textarea>
             </div>
             <div className="mb-3">
@@ -105,8 +104,8 @@ function AddProject({projectId}) {
                  </label>
                  <select
                    className="form-select"
-                   value={status}
-                   onChange={(e) => setStatus(e.target.value)}
+                                     onChange={(e) => setStatus(e.target.value)}
+                          value= {existing ? status : ""}             
                  >
                    <option value="Dropdown">Dropdown</option>
                    <option value="To Do">To Do</option>

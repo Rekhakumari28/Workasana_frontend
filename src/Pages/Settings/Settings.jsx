@@ -7,7 +7,7 @@ import {
 import { deleteTeamAsync, fetchTeamsAsync } from "../../Features/teamSlice";
 import { deleteTaskAsync, fetchTasksAsync } from "../../Features/taskSlice";
 import { Link, useNavigate } from "react-router-dom";
-import toast from "react-hot-toast";
+import toast, { Toaster } from "react-hot-toast";
 import Sidenav from "../../Components/Sidenav";
 import AddProject from "../Add New/AddProject";
 import AddTask from "../Add New/AddTask";
@@ -17,7 +17,7 @@ function Settings() {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const { projects } = useSelector((state) => {
-    console.log(state.projects);
+ 
     return state.projects;
   });
   const { teams } = useSelector((state) => state.teams);
@@ -134,7 +134,7 @@ function Settings() {
                         <div className="col-md-6">
                           <button
                             type="button"
-                            class="btn btn-outline-secondary btn-sm"
+                            className="btn btn-outline-secondary btn-sm"
                             data-bs-toggle="modal"
                             data-bs-target="#addNewProject"
                             data-bs-whatever="@mdo"
@@ -334,6 +334,7 @@ function Settings() {
                 ))}
             </div>
           </section>
+          <Toaster />
         </div>
       </div>
     </div>

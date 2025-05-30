@@ -10,6 +10,7 @@ import {
 } from "../../Features/memberSlice";
 
 function TeamDetail() {
+  const [newName, setNewName] = useState("")
   const teamId = useParams();
   const dispatch = useDispatch();
   const { teams } = useSelector((state) => state.teams);
@@ -26,6 +27,18 @@ function TeamDetail() {
   useEffect(() => {
     dispatch(fetchTeamsAsync());
   }, []);
+
+
+  const handleAdd = ()=>{  
+   try {
+    dispatch(addMembersAsync({name:newName})).unwrap();
+    setNewName("")
+    toast.success("Member created")
+    dispatch(fetchMembersAsync())
+   } catch (error) {
+    console.error("Failed to add:", error);
+   }
+}
 
   const handleRemoveMember = async (id) => {
     // Find the member by name
@@ -131,20 +144,20 @@ function TeamDetail() {
                     </p>
                     {member.name}
                   </div>
-                  <div className="col-md-4">
+                  {/* <div className="col-md-4">
                     <button
                       className="btn btn-outline-danger btn-sm"
                       onClick={() => handleRemoveMember(member._id)}
                     >
                       Delete
                     </button>
-                  </div>
+                  </div> */}
                 </div>
               ))}
             </div>
           </section>
-          <section className="pb-3 px-2">
-            <div className="py-1 ">
+          <section className="pb-3 px-2 row">
+            <div className="py-1 col-auto">
               <button
                 type="button"
                 className="btn btn-primary ms-auto me-2"
@@ -154,6 +167,14 @@ function TeamDetail() {
               >
                 + Members
               </button>
+              
+            </div>
+            <div className="col-auto" >
+              <div className="input-group w-75 mt-1" >
+        <input className="form-control" type="text" placeholder="Add member name" onChange={(e)=>setNewName(e.target.value)}/>
+        <button className="btn btn-primary" onClick={handleAdd}>Add</button>
+        </div>
+        
             </div>
             <div className="py-1">
               <div
@@ -176,7 +197,7 @@ function TeamDetail() {
                         aria-label="Close"
                       ></button>
                     </div>
-                    <AddMember />
+                    <AddMember teamId={teamData?._id}/>
                   </div>
                 </div>
               </div>

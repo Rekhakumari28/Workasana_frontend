@@ -38,12 +38,12 @@ export const addTeamsAsync = createAsyncThunk(
 
 export const updateTeamAsync = createAsyncThunk(
   "teams/updateTeamAsync",
-  async ({ id, updateTeam }) => {
-    console.log(updateTeam, id);
+  async ({ id, name, members }) => {
+   
     const token = localStorage.getItem("token");
     const response = await axios.put(
       `${workasana_URL}/teams/${id}`,
-      updateTeam,
+      { name, members},
       {
         headers: {
           Authorization: `${token}`,

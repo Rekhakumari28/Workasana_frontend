@@ -20,18 +20,18 @@ export const fetchProjectsAsync = createAsyncThunk(
       }
     );
     const data = response.data.project;
-   
+
     return data;
   }
 );
 
 export const addProjectAsync = createAsyncThunk(
   "projects/addProjectAsync",
-  async ({ newProject }) => {
+  async ({ name, description, status }) => {
     const token = localStorage.getItem("token");
     const response = await axios.post(
-      `${workasana_URL}/api/projects`,
-      newProject,
+      `https://workasana-backend-git-main-rekha-kumari-bheels-projects.vercel.app/api/projects`,
+      {name, description, status},
       {
         headers: {
           Authorization: `${token}`,
@@ -39,21 +39,19 @@ export const addProjectAsync = createAsyncThunk(
       }
     );
     const data = response.data;
-  
+    console.log(response);
     return data;
   }
 );
 
 export const updateProjectAsync = createAsyncThunk(
   "project/updateProjectAsync",
-  async ({ id, updateProject }) => {
+  async ({ id, name, description, status }) => {
     try {
       const token = localStorage.getItem("token");
-      console.log(id, updateProject);
-
-      const response = await axios.put(
+            const response = await axios.put(
         `${workasana_URL}/projects/${id}`,
-        updateProject,
+        {name, description, status},
         {
           headers: {
             Authorization: `${token}`,
@@ -74,14 +72,11 @@ export const deleteProjectAsync = createAsyncThunk(
   async ({ id }) => {
     try {
       const token = localStorage.getItem("token");
-      const response = await axios.delete(
-        `${workasana_URL}/projects/${id}`,
-        {
-          headers: {
-            Authorization: `${token}`,
-          },
-        }
-      );
+      const response = await axios.delete(`${workasana_URL}/projects/${id}`, {
+        headers: {
+          Authorization: `${token}`,
+        },
+      });
       const data = response.data;
       console.log(data, "deleted Project data");
       return data;

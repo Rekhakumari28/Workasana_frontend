@@ -27,11 +27,35 @@ export const fetchTasksAsync = createAsyncThunk(
 
 export const addTasksAsync = createAsyncThunk(
   "tasks/addTasksAsync",
-  async ({ newTask }) => {
+  async ({ name, project, team, timeToComplete, tags, owners, priority, status }) => {
     const token = localStorage.getItem("token");
-    const response = await axios.post(
-      `${workasana_URL}/tasks`,
-      newTask,
+    const response = await axios.post(`${workasana_URL}/tasks`, { name, project, team, timeToComplete, tags, owners, priority, status }, {
+      headers: {
+        Authorization: `${token}`,
+      },
+    });
+    const data = response.data;
+    return data;
+  }
+);
+
+export const updateTaskAsync = createAsyncThunk(
+  "tasks/updateTaskAsync",
+  async ({
+    id,
+    name,
+    project,
+    team,
+    timeToComplete,
+    tags,
+    owners,
+    priority,
+    status,
+  }) => {
+    const token = localStorage.getItem("token");
+    const response = await axios.put(
+      `${workasana_URL}/tasks/${id}`,
+      { name, project, team, timeToComplete, tags, owners, priority, status },
       {
         headers: {
           Authorization: `${token}`,
@@ -43,30 +67,15 @@ export const addTasksAsync = createAsyncThunk(
   }
 );
 
-export const updateTaskAsync = createAsyncThunk(
-  "tasks/updateTaskAsync",
-  async ({ id, updateTask }) => {
-    const token = localStorage.getItem("token");
-    const response = await axios.put(
-      `${workasana_URL}/tasks/${id}`,
-      updateTask,{ headers: {
-        Authorization: `${token}`, 
-      },}
-    );
-    const data = response.data;
-    return data;
-  }
-);
-
 export const deleteTaskAsync = createAsyncThunk(
   "tasks/deleteTaskAsync",
   async ({ id }) => {
     const token = localStorage.getItem("token");
-    const response = await axios.delete(
-      `${workasana_URL}/tasks/${id}`,{ headers: {
-        Authorization: `${token}`, 
-      },}
-    );
+    const response = await axios.delete(`${workasana_URL}/tasks/${id}`, {
+      headers: {
+        Authorization: `${token}`,
+      },
+    });
     const data = response.data;
     return data;
   }

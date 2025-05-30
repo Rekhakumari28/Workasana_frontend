@@ -7,8 +7,6 @@ import { Link, useNavigate, useSearchParams } from "react-router-dom";
 import { jwtDecode } from "jwt-decode";
 import AddProject from "../Pages/Add New/AddProject";
 
-
-
 function ProjectsList({ searchQuery }) {
   const [searchParams, setSearchParams] = useSearchParams();
   const dispatch = useDispatch();
@@ -52,8 +50,6 @@ function ProjectsList({ searchQuery }) {
       : projects?.filter((project) =>
           project?.name.toLowerCase().includes(searchQuery.toLowerCase())
         );
-
-
 
   return (
     <div className="row py-3 ">

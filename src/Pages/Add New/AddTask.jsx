@@ -9,8 +9,9 @@ import { fetchTeamsAsync } from "../../Features/teamSlice";
 import { addTasksAsync, updateTaskAsync } from "../../Features/taskSlice";
 import { fetchUserAsync } from "../../Features/userSlice";
 import toast, { Toaster } from "react-hot-toast";
+import { fetchMembersAsync } from "../../Features/memberSlice";
 
-function AddTask({taskId}) {
+function AddTask({ taskId }) {
   const [projectName, setProjectName] = useState("");
   const [taskName, setTaskName] = useState("");
   const [teamName, setTeam] = useState("");
@@ -25,13 +26,15 @@ function AddTask({taskId}) {
   const dispatch = useDispatch();
   const { projects } = useSelector((state) => state.projects);
   const { teams } = useSelector((state) => state.teams);
- 
+  const { members } = useSelector((state) => {
+    return state.members;
+  });
+
+
   const { tasks } = useSelector((state) => state.tasks);
 
   const existingTask =
-    taskId &&
-    tasks?.length > 0 &&
-    tasks?.find((task) => task._id == taskId);
+    taskId && tasks?.length > 0 && tasks?.find((task) => task._id == taskId);
 
   const existing = Boolean(existingTask);
 
@@ -39,6 +42,7 @@ function AddTask({taskId}) {
     dispatch(fetchUserAsync());
     dispatch(fetchProjectsAsync());
     dispatch(fetchTeamsAsync());
+    dispatch(fetchMembersAsync());
   }, []);
 
   useEffect(() => {
@@ -65,35 +69,29 @@ function AddTask({taskId}) {
     e.preventDefault();
 
     if (existing) {
-      const updateTask = {
-        name: taskName,
+      
+      dispatch(updateTaskAsync({ id: taskId,  name: taskName,
         project: projectName,
         team: teamName,
         timeToComplete: timeout,
         tags: tags,
         owners: owners,
         priority: priority,
-        status: taskStatus,
-      };
-
-      dispatch(updateTaskAsync({ id: taskId, updateTask }));
+        status: taskStatus, }));
       toast.success("Task Updated successfully!");
-       document.querySelector("#addNewTask .btn-close").click();
-    } else {
-      const newTask = {
-        name: taskName,
+      document.querySelector("#addNewTask .btn-close").click();
+    } else {      
+
+      dispatch(addTasksAsync({ name: taskName,
         project: projectName,
         team: teamName,
         timeToComplete: timeout,
         tags: tags,
         owners: owners,
         priority: priority,
-        status: taskStatus,
-      };
-
-      dispatch(addTasksAsync({ newTask }));
+        status: taskStatus }));
       toast.success("New task created successfully!");
-       document.querySelector("#addNewTask .btn-close").click();
+      document.querySelector("#addNewTask .btn-close").click();
     }
   };
 
@@ -124,8 +122,8 @@ function AddTask({taskId}) {
                 {" "}
                 <select
                   className="form-select"
-                  value={projectName}
                   onChange={(e) => setProjectName(e.target.value)}
+                  value={projectName}
                 >
                   <option value="Dropdown">Dropdown</option>
                   {projects?.length > 0 &&
@@ -151,8 +149,8 @@ function AddTask({taskId}) {
                   className=" form-control"
                   type="text"
                   placeholder="Enter Task Name"
-                  value={taskName}
                   onChange={(e) => setTaskName(e.target.value)}
+                  value={taskName}
                 />
               </div>
             </div>
@@ -167,8 +165,8 @@ function AddTask({taskId}) {
               <div className="col-md-9">
                 <select
                   className="form-select"
-                  value={teamName}
                   onChange={(e) => setTeam(e.target.value)}
+                  value={teamName}
                 >
                   <option value="Dropdown">Dropdown</option>
                   {teams?.length > 0 &&
@@ -191,8 +189,8 @@ function AddTask({taskId}) {
                 {" "}
                 <select
                   className="form-select"
-                  value={taskStatus}
                   onChange={(e) => setTaskStatus(e.target.value)}
+                  value={taskStatus}
                 >
                   <option value="Dropdown">Dropdown</option>
                   <option value="To Do">To Do</option>
@@ -211,13 +209,14 @@ function AddTask({taskId}) {
                 </label>
               </div>
               <div className="col-md-9">
-                <input
-                  onChange={(e) => setOwners(e.target.value)}
-                  type="text"
-                  name="owners"
-                  value={owners}
-                  className="form-control mx-1"
-                />
+                <select className="form-select"  onChange={(e) => setOwners(e.target.value)} >
+                  <option value="">Select owner</option>
+                  {members?.map((owner) => (
+                    <option key={owner._id} value={owner._id}>
+                      {owner.name}
+                    </option>
+                  ))}
+                </select>
               </div>
             </div>
 
@@ -233,8 +232,8 @@ function AddTask({taskId}) {
                   className="form-control"
                   type="text"
                   placeholder="Tags"
-                  value={newTag}
                   onChange={(e) => setNewTag(e.target.value)}
+                  value={newTag}
                 />
               </div>
 
@@ -271,8 +270,8 @@ function AddTask({taskId}) {
                   className=" form-control"
                   type="text"
                   placeholder="Enter Time in Days"
-                  value={timeout}
                   onChange={(e) => setTimeout(e.target.value)}
+                  value={timeout}
                 />
               </div>
             </div>
@@ -286,8 +285,8 @@ function AddTask({taskId}) {
                 {" "}
                 <select
                   className="form-select"
-                  value={priority}
                   onChange={(e) => setPriority(e.target.value)}
+                  value={priority}
                 >
                   <option value="Dropdown">Dropdown</option>
                   <option value="Low">Low</option>

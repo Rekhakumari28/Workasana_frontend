@@ -1,20 +1,35 @@
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { Link, useNavigate, useParams } from "react-router-dom";
-import { addTeamsAsync, fetchTeamsAsync, updateTeamAsync } from "../../Features/teamSlice";
-import toast from "react-hot-toast";
+
+import {
+  addTeamsAsync,
+  fetchTeamsAsync,
+  updateTeamAsync,
+} from "../../Features/teamSlice";
+
 import { addMembersAsync, fetchMembersAsync } from "../../Features/memberSlice";
+import toast, { Toaster } from "react-hot-toast";
 
+export function AddMember({ teamId }) {
+  const [teamName, setTeamName] = useState("");
+  const [selectedMembers, setSelectedMembers] = useState([]);
 
-export function AddMember({teamId}){
- const dispatch = useDispatch();
- 
+  const dispatch = useDispatch();
   const { teams } = useSelector((state) => state.teams);
-  const getTeam = teams.find((team) => team._id == teamId);
-
-  const [name, setName] = useState("");
 
   const { members } = useSelector((state) => state.members);
+
+  const getTeam =teams && teams?.length >0 && teams?.find((team) => team._id == teamId);
+
+
+  const selectMemberHandler = (event) => {
+    const { checked, value } = event.target;
+    if (checked) {
+      setSelectedMembers((prevVal) => [...prevVal, value]);
+    } else {
+      setSelectedMembers((prevVal) => prevVal.filter((prev) => prev !== value));
+    }
+  };
 
   useEffect(() => {
     dispatch(fetchMembersAsync());
@@ -22,139 +37,130 @@ export function AddMember({teamId}){
 
   const handleAddMember = async (e) => {
     e.preventDefault();
-
-    // Find the member by name
-    const matchedMember = members.find(
-      (member) => member.name === name || member === name
-    );
-
-    if (!matchedMember) {
-      alert("Member not found.");
-      return;
-    }
-
-    const updatedMembers = [
-      ...getTeam.members.map((m) => m._id || m),
-      matchedMember._id || matchedMember,
-    ];
-
+    console.log(teamId, teamName, selectedMembers);
     try {
       await dispatch(
         updateTeamAsync({
-          id: getTeam._id,
-          updateTeam: { members: updatedMembers },
+          id: teamId,
+          name: teamName,
+          members: selectedMembers,
         })
       ).unwrap();
-
-      setName("");
-
+      setSelectedMembers([]);
+      setTeamName("");
+     setTimeout(()=>{
       window.location.reload()
+     }, 2000)
     } catch (error) {
       console.error("Failed to update team:", error);
     }
   };
-return(
+  return (
     <div className="modal-body">
-                <form onSubmit={handleAddMember}>
-                  <div className="mb-3">
-                    <label  className="col-form-label">
-                      Members Name:
-                    </label>
-                    <input
-                      type="text"
-                      className="form-control"
-                      id="name"
-                      placeholder="Member Name"
-                      value={name}
-                      onChange={(e) => setName(e.target.value)}
-                    />
-                  </div>
+     
+     
+      <form onSubmit={handleAddMember}>
+        <div className="mb-3">
 
-                  <div className="modal-footer">
-                   
-                    <button type="submit" className="btn btn-primary">
-                      Add
-                    </button>
-                  </div>
-                </form>
-              </div>
-)
+          {members && members?.length > 0 && members?.map((member) => (
+            <label key={member._id}>
+              <input
+                type="checkbox"
+                className="input-check my-3 ms-3"
+                placeholder={`Member `}
+                onChange={selectMemberHandler}
+                value={member._id}
+              />{" "}
+              {member.name}
+            </label>
+          ))}
+        </div>
+
+        <div className="modal-footer">
+          <button type="submit" className="btn btn-primary">
+            Add Member
+          </button>
+        </div>
+      </form>
+       <Toaster />
+    </div>
+  );
 }
-
 
 function AddTeam() {
-  const [teamName, setTeamName] = useState(""); 
-  
-  const [selectedMembers, setSelectedMembers] = useState(["", "", ""]);
- const {members} = useSelector((state)=>state.members)
-  const dispatch = useDispatch();
-  
-const selectMemberHandler = (member)=>{
-  let newMembers = [...members];
-   newMembers =  member;
-    setSelectedMembers(newMembers)
-}
+  const [teamName, setTeamName] = useState("");
 
+  const [selectedMembers, setSelectedMembers] = useState([]);
+  const { members } = useSelector((state) => state.members);
+  const dispatch = useDispatch();
+
+  const selectMemberHandler = (event) => {
+    const { checked, value } = event.target;
+    if (checked) {
+      setSelectedMembers((prevVal) => [...prevVal, value]);
+    } else {
+      setSelectedMembers((prevVal) => prevVal.filter((prev) => prev !== value));
+    }
+  };
+  console.log(selectedMembers);
   const handleAddTeam = (e) => {
     e.preventDefault();
-     
 
-    dispatch(addTeamsAsync({
-      name: teamName,
-      members :selectedMembers,
-    }));
+    dispatch(
+      addTeamsAsync({
+        name: teamName,
+        members: selectedMembers,
+      })
+    );
     setTeamName("");
-    setSelectedMembers(["", "", ""]); 
-   window.location.reload() 
+    setSelectedMembers([]);
+    setTimeout(() => {
+      window.location.reload();
+    }, 2000);
   };
 
-   useEffect(() => {
+  useEffect(() => {
     dispatch(fetchTeamsAsync());
-    dispatch(fetchMembersAsync())
+    dispatch(fetchMembersAsync());
   }, [dispatch]);
 
   return (
-   <div className="modal-body">
-                    <form onSubmit={handleAddTeam}>
-                      <div className="mb-3">
-                        <label  className="col-form-label">
-                          Team Name:
-                        </label>
-                        <input
-                          type="text"
-                          className="form-control"
-                          id="recipient-name"
-                          placeholder="Enter Team Name"
-                          value={teamName}
-                          onChange={(e) => setTeamName(e.target.value)}
-                        />
-                      </div>
-                      <div className="mb-3">
-                        <label className="col-form-label">
-                          Add Members:
-                        </label>
-                        {members?.map((member) => (
-                          <label  key={member._id} >
-                          <input
-                           
-                            type="checkbox"
-                            className="input-check my-3 ms-3"
-                            placeholder={`Member `}
-                            value={member._id}
-                            onChange={(e) =>                       
-                              selectMemberHandler(e.target.value)
-                            }
-                          />{" "} {member.name}</label>
-                        ))}
-                      </div>
-                      <div className="modal-footer">
-                       
-                        <button type="submit" className="btn btn-primary">
-                          Save Team
-                        </button>
-                      </div>
-                    </form>
-                  </div>
+    <div className="modal-body">
+      <form onSubmit={handleAddTeam}>
+        <div className="mb-3">
+          <label className="col-form-label">Team Name:</label>
+          <input
+            type="text"
+            className="form-control"
+            id="recipient-name"
+            placeholder="Enter Team Name"
+            value={teamName}
+            onChange={(e) => setTeamName(e.target.value)}
+          />
+        </div>
+        <div className="mb-3">
+          <label className="col-form-label">Add Members:</label>
+          {members?.map((member) => (
+            <label key={member._id}>
+              <input
+                type="checkbox"
+                className="input-check my-3 ms-3"
+                placeholder={`Member `}
+                onChange={selectMemberHandler}
+                value={member._id}
+              />{" "}
+              {member.name}
+            </label>
+          ))}
+        </div>
+        <div className="modal-footer">
+          <button type="submit" className="btn btn-primary">
+            Save Team
+          </button>
+        </div>
+      </form>
+     
+    </div>
   );
 }
 
