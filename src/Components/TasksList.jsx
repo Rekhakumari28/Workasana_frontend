@@ -98,7 +98,7 @@ function TasksList({searchQuery}) {
                      
                     </span>
                   ))}</p>
-               <p> Team: {task.team.name}</p>
+               <p> Team: {task.team?.name}</p>
                  
 
                 <div className="card-img-overlay p-1">
