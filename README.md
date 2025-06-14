@@ -87,24 +87,24 @@ Explore a 5-6 minute walkthrough showcasing all major features of this app.
 
 ### **GET /api/projects**<br>
 
-Displays a list of all available Projects.<br>
+Displays a list of all Projects.<br>
 Sample API response<br>
 
 ```[{_id, name, description, status}, ...]```
 
 ### **GET /api/tasks**<br>
 
-Displays a list of all available Tasks.<br>
+Displays a list of all Tasks.<br>
 Sample API response<br>
 
-```{_id, project, taskName, team, status, owners, tags, timeToComplete, priority}```
+```[{_id, project, taskName, team, status, owners, tags, timeToComplete, priority}, ... ]```
 
 ### **GET /api/teams**<br>
 
-Displays a list of all available Teams.<br>
+Displays a list of all Teams.<br>
 Sample API response<br>
 
-```{_id, name, description, members}```
+```[{_id, name, description, members}, ...]```
 
 ### **POST /api/user/signup**<br>
 
