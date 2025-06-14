@@ -24,7 +24,7 @@ export function TaskClosedBy() {
   const taskCountByTeam =
     taskClosedByTeam?.length > 0 &&
     taskClosedByTeam?.reduce((acc, curr) => {
-      const teamName = curr.team.name;
+      const teamName = curr.team?.name;
       acc[teamName] = (acc[teamName] || 0) + 1;
       return acc;
     }, {});
